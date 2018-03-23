@@ -20,6 +20,25 @@ import java.util.Scanner;
  */
 public class Requetes {
 
+	public static void creatSeminaire(Connection conn) throws SQLException {
+        
+        Statement stmt = conn.createStatement();
+        //int rs = stmt.executeUpdate("insert into  values ('"+id+"', '"+ jour +"-"+ mois +"-"+annee + "')");
+        // Close the result set, statement and theconnection 
+        stmt.close();
+    }
+	//selcetionne les personnes qui sont des animateurs
+	public static void selectAnimateur(Connection conn)throws SQLException {
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select * from Personnes where typePers='ACT'");
+        while (rs.next()) {
+            System.out.println(rs.getInt("idPers") + " - "+ rs.getString("nomPers") + " " +rs.getString("prenomPers"));
+        }
+        rs.close();
+        stmt.close();
+	}
+	
+	/*
     public static void requeteAffSpe(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from LesSpectacles");
@@ -109,5 +128,6 @@ public class Requetes {
         // Close the result set, statement and theconnection 
         stmt.close();
     }
+    */
 
 }

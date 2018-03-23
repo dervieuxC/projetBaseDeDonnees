@@ -1,6 +1,7 @@
 package modele;
 
-import java.util.Scanner;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * 
@@ -8,10 +9,10 @@ import java.util.Scanner;
  * @author Thibaut Masselin
  *
  */
-public class Confirmation extends Seminaire {
+public class Confirmation extends ActionSeminaire {
 
 	@Override
-	public void action() {
+	public void action(Connection conn) {
 		// Code de la Confirmation
 		/*
 		Confirmer un séminaire 1 semaine avant sa date planifiée :
@@ -20,7 +21,12 @@ public class Confirmation extends Seminaire {
 		• bilan budgétaire si le séminaire a lieu
 		 */
 		
-		
+		try {
+			req.creatSeminaire(conn);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
         //nombre d'inscriptions est insuffisant
 		/*
