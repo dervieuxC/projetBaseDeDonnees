@@ -1,15 +1,17 @@
 package modele;
 
+import java.sql.Connection;
+
 /**
  * 
  * @author Corentin Dervieux
  * @author Thibaut Masselin
  *
  */
-public class Creation extends Seminaire {
+public class Creation extends ActionSeminaire {
 
 	@Override
-	public void action() {
+	public void action(Connection conn) {
 		// Code de la création d'un séminaire
 		
 		/*

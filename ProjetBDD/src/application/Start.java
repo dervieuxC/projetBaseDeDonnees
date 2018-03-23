@@ -1,12 +1,15 @@
 package application;
 
 import java.util.Scanner;
+
+import connexion.ConnexionBdd;
 import modele.*;
 
 public class Start {
 
 	public static void main(String[] args) {
-		Seminaire semi;
+		ActionSeminaire semi;
+		
 		
 		Scanner sc = new Scanner(System.in);
         int choix;
@@ -34,7 +37,7 @@ public class Start {
         	// Exception
         }
         
-        semi.action();
+        semi.action(ConnexionBdd.getConnexion());
 	}
 
 }

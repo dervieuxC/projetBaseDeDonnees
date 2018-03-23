@@ -1,15 +1,17 @@
 package modele;
 
+import java.sql.Connection;
+
 /**
  * 
  * @author Corentin Dervieux
  * @author Thibaut Masselin
  *
  */
-public class Planning extends Seminaire {
+public class Planning extends ActionSeminaire {
 
 	@Override
-	public void action() {
+	public void action(Connection conn) {
 		// Code de la vision sur une semaine
 		/*
 		Vision sur une semaine
