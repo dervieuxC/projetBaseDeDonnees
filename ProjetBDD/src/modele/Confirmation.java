@@ -1,5 +1,7 @@
 package modele;
 
+import java.util.Scanner;
+
 /**
  * 
  * @author Corentin Dervieux
@@ -11,6 +13,30 @@ public class Confirmation extends Seminaire {
 	@Override
 	public void action() {
 		// Code de la Confirmation
+		/*
+		Confirmer un séminaire 1 semaine avant sa date planifiée :
+		• annulation si le nombre d'inscriptions est insuffisant
+		• prévenir le prestataire (soit annulation, soit confirmation avec le nombre de personnes)
+		• bilan budgétaire si le séminaire a lieu
+		 */
+		
+		
+		
+        //nombre d'inscriptions est insuffisant
+		/*
+		if(nbInscrit < nbpersonneMin){
+			//anulation
+		}
+		*/
+		
+		//prévenir le prestataire
+		
+		//Si le séminaire à lieu 
+		/*
+		if(seminaire == ok){
+			//prix
+		}
+		 */
 	}
 	
 }
