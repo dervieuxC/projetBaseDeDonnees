@@ -1,13 +1,10 @@
 package requete;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Scanner;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,20 +16,43 @@ import java.util.Scanner;
  * @author dervieco
  */
 public class Requetes {
-
-	public static void creatSeminaire(Connection conn) throws SQLException {
-        
+	/**
+	 * 
+	 * @param conn
+	 * @throws SQLException
+	 */
+	public static void creatSeminaire(Connection conn) throws SQLException {      
         Statement stmt = conn.createStatement();
         //int rs = stmt.executeUpdate("insert into  values ('"+id+"', '"+ jour +"-"+ mois +"-"+annee + "')");
         // Close the result set, statement and theconnection 
         stmt.close();
     }
-	//selcetionne les personnes qui sont des animateurs
-	public static void selectAnimateur(Connection conn)throws SQLException {
+	
+	/**
+	 * selcetion des personnes qui sont des animateurs/animatrices
+	 * @param conn
+	 * @throws SQLException
+	 */
+	public static void afficheAnimateurSelect(Connection conn)throws SQLException {
 		Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from Personnes where typePers='ACT'");
         while (rs.next()) {
             System.out.println(rs.getInt("idPers") + " - "+ rs.getString("nomPers") + " " +rs.getString("prenomPers"));
+        }
+        rs.close();
+        stmt.close();
+	}
+	
+	/**
+	 * selcetion toutes activitées qui sont dans la bdd
+	 * @param conn
+	 * @throws SQLException
+	 */
+	public static void afficheActiviteSelect(Connection conn)throws SQLException {
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select * from Activite");
+        while (rs.next()) {
+            System.out.println(rs.getInt("idAct") + " - "+ rs.getString("libelleAct"));
         }
         rs.close();
         stmt.close();
