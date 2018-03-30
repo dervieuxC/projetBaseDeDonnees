@@ -1,14 +1,8 @@
 package modele;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.List;
 
 import application.InsertionScanner;
 import requete.Requetes;
@@ -37,11 +31,13 @@ public class Creation extends ActionSeminaire {
 	        
 	        //• journée
 	        
+	        int dureeSemi = InsertionScanner.dureeSeminaire();
 	        
-	        
+	        		
 			//• programme initial (activités)
 			
-	        
+	        Requetes.afficheActiviteSelect(conn);
+	        List<Integer> idActivite = InsertionScanner.activiteSelected(dureeSemi);
 	        
 			//• le cas échéant, le ou les conférenciers, avec titre, transparents (dans les délais prévus),tarif de la prestation
 			

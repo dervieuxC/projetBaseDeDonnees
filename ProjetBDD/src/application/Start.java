@@ -1,7 +1,5 @@
 package application;
 
-import java.util.Scanner;
-
 import connexion.ConnexionBdd;
 import modele.*;
 
@@ -11,11 +9,7 @@ public class Start {
 		try{
 			ActionSeminaire semi;
 			
-			
-			Scanner sc = new Scanner(System.in);
-	        int choix;
-	        System.out.println("Choisir ");
-	        choix = sc.nextInt();
+	        int choix = InsertionScanner.choixFonctionnalite();
 	        
 	        switch(choix) {
 	        case 1 :

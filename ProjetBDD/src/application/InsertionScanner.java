@@ -1,14 +1,27 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+
+import modele.Confirmation;
+import modele.Creation;
+import modele.Inscription;
+import modele.Planning;
 
 public class InsertionScanner {
 	
 	private static Scanner sc = new Scanner(System.in);
 	
 	private InsertionScanner(){}
+	
+	
+	public static int choixFonctionnalite(){
+		System.out.println("Choisir "); 
+        return sc.nextInt();
+    }
 	
 	public static String DateString(){
 		Map<Integer,String> lesMois = new HashMap<>();
@@ -55,10 +68,45 @@ public class InsertionScanner {
         String str = jour+"-"+lesMois.get(mois)+"-"+String.valueOf(annee).substring(2, 4);
 		return str;	
 	}
+	
 	public static int animateurNum(){
 		int numAnimateur;
 	    System.out.println("Choisir un numéro d'animateur :");
 	    numAnimateur = sc.nextInt();
 	    return numAnimateur;
+	}
+
+	public static int dureeSeminaire(){
+		System.out.println("Choisir la durée du seminaire (0 = matin | 1=après-midi | 2=journée)");
+		while(true){ 
+			switch(sc.nextInt()) {
+	        case 0 :
+	        	return 0;	        
+	        case 1 :
+	        	return 1;	        
+	        case 2 :
+	        	return 2;
+	        default:
+	        	System.err.println("Mauvaise saisie !");
+	        	System.out.println("0 = matin | 1=après-midi | 2=journée");
+	        }
+		}
+	}
+	
+	public static List<Integer> activiteSelected(int dureeJour){
+		// 0 = matin
+		// 1 = après-midi
+		// 2 = journée entière
+		
+		List<Integer> lesActivitees = new ArrayList<>();
+		int nbIter = 3;
+		if(dureeJour == 2){
+			nbIter = 6;
+		}
+		System.out.println("Choisir les avtivité voulut"); 
+		for(int i = 0; i < nbIter;i++){
+			lesActivitees.add(sc.nextInt());
+		}
+        return lesActivitees;
 	}
 }
