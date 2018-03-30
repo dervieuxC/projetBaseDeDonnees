@@ -9,7 +9,11 @@ public class Start {
 		try{
 			ActionSeminaire semi;
 			
-	        int choix = InsertionScanner.choixFonctionnalite();
+	        int choix = InsertionScanner.choixFonctionnalite(1,4,"Choisir une commende :\n"
+	        		+ " - 1 : création d'un séminaire\n"
+	        		+ " - 2 : Incription à un séminaire\n"
+	        		+ " - 3 : Confimation à un séminaire\n"
+	        		+ " - 4 : Le planning des Séminaire");
 	        
 	        switch(choix) {
 	        case 1 :

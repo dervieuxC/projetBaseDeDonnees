@@ -15,12 +15,23 @@ public class InsertionScanner {
 	private InsertionScanner(){}
 	
 	
-	public static int choixFonctionnalite(){
-		System.out.println("Choisir "); 
-        return sc.nextInt();
+	public static int choixFonctionnalite(int min,int max,String question){
+		int t;
+		System.out.println(question);
+		while(true){
+			t = sc.nextInt();
+			if( t >= 0 && t <= 5 ){
+				return t;
+			}
+			System.err.println("Erreur de saisie !");
+		}
+		 
+        
     }
 	
-	public static String DateString(){
+	public static String DateString(String info){
+		
+		System.out.println(info);
 		Map<Integer,String> lesMois = new HashMap<>();
 		lesMois.put(1, "JAN");
 		lesMois.put(2, "FEB");
@@ -38,7 +49,7 @@ public class InsertionScanner {
 		int mois, jour,annee;
 		
         // Selectionne le mois
-        System.out.println("entrez le mois de la representation (1 - 12): ");
+        System.out.println("entrez le mois (1 - 12): ");
         while(true){
 	        mois = sc.nextInt();
 	        if(mois > 0 && mois <=12){break;}
@@ -55,14 +66,14 @@ public class InsertionScanner {
         }
         
         // Selectionne le jour
-        System.out.println("entrez le jour de la representation (1 - "+maxJour+"): ");
+        System.out.println("entrez le jour (1 - "+maxJour+"): ");
         while(true){  
 	        jour = sc.nextInt();
 	        if(jour > 0 && jour <= maxJour){break;}
         }
         // Selectionne l'année
         while(true){
-	        System.out.println("entrez l'annee de la representation (2000 - 2015): ");
+	        System.out.println("entrez l'année (2000 - 2015): ");
 	        annee = sc.nextInt();
 	        if(annee > 2000){break;}
         }
@@ -72,15 +83,13 @@ public class InsertionScanner {
 		return str;	
 	}
 	
-	public static int animateurNum(){
-		int numAnimateur;
-	    System.out.println("Choisir un numéro d'animateur :");
-	    numAnimateur = sc.nextInt();
-	    return numAnimateur;
+	public static int animateurNum(String question){
+	    System.out.println(question);
+	    return sc.nextInt();
 	}
 
-	public static int dureeSeminaire(){
-		System.out.println("Choisir la durée du seminaire (0 = matin | 1=après-midi | 2=journée)");
+	public static int dureeSeminaire(String question){
+		System.out.println(question + " (0 = matin | 1=après-midi | 2=journée) ");
 		while(true){ 
 			switch(sc.nextInt()) {
 	        case 0 :
@@ -96,7 +105,7 @@ public class InsertionScanner {
 		}
 	}
 	
-	public static List<Integer> activiteSelected(int dureeJour){
+	public static List<Integer> activiteSelected(int dureeJour, String question){
 		// 0 = matin
 		// 1 = après-midi
 		// 2 = journée entière
@@ -106,7 +115,7 @@ public class InsertionScanner {
 		if(dureeJour == 2){
 			nbIter = 6;
 		}
-		System.out.println("Choisir les avtivité voulut"); 
+		System.out.println(question); 
 		for(int i = 0; i < nbIter;i++){
 			lesActivitees.add(sc.nextInt());
 		}

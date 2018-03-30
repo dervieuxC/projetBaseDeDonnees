@@ -23,27 +23,29 @@ public class Creation extends ActionSeminaire {
 		try {
 			//• animateur			
 			Requetes.afficheAnimateurSelect(conn);
-			int numAnimateur = InsertionScanner.animateurNum();
+			int numAnimateur = InsertionScanner.animateurNum("Choisir un numéro d'animateur :");
 	        
 	        //• date
 	        
-	        String dateString = InsertionScanner.DateString();
+	        String dateString = InsertionScanner.DateString("Déterminer une date :");
 	        
 	        //• journée
 	        
-	        int dureeSemi = InsertionScanner.dureeSeminaire();
-	        
+	        int dureeSemi = InsertionScanner.dureeSeminaire("Choisir la durée du seminaire");
 	        		
 			//• programme initial (activités)
 			
 	        Requetes.afficheActiviteSelect(conn);
-	        List<Integer> idActivite = InsertionScanner.activiteSelected(dureeSemi);
+	        List<Integer> idActivite = InsertionScanner.activiteSelected(dureeSemi,"Choisir les avtivitées vouluent");
 	        
 			//• le cas échéant, le ou les conférenciers, avec titre, transparents (dans les délais prévus),tarif de la prestation
 			
 			
 			//• nombre de places
 			
+	        /*affiche les salles qui sont disponoble ce jour
+	        int nbPlace = InsertionScanner.;*/
+	        
 			//• tarif de l'inscription
 			
 			//• prestataire
