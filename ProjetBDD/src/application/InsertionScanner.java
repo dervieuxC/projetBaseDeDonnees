@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import modele.Confirmation;
-import modele.Creation;
-import modele.Inscription;
-import modele.Planning;
+
 
 public class InsertionScanner {
 	
@@ -38,9 +35,9 @@ public class InsertionScanner {
 		lesMois.put(11, "NOV");
 		lesMois.put(12, "DEC");
 		
-		int mois, jour,annee, maxJour = 31;
+		int mois, jour,annee;
 		
-        // Selectionne le jour
+        // Selectionne le mois
         System.out.println("entrez le mois de la representation (1 - 12): ");
         while(true){
 	        mois = sc.nextInt();
@@ -48,12 +45,16 @@ public class InsertionScanner {
 	        else{System.err.println("Erreur de saisie !");
 	        System.out.println("Merci de saisir entre les bornes (1 - 12)");}
         }
+        
+        // pour conaître le nombre de jour du mois selectionner
+        int maxJour = 31;
         if(mois == 2){
         	maxJour = 28;
         }else if(mois == 4 || mois == 6 || mois == 9 || mois == 11){
         	maxJour = 30;
         }
-        // Selectionne le mois
+        
+        // Selectionne le jour
         System.out.println("entrez le jour de la representation (1 - "+maxJour+"): ");
         while(true){  
 	        jour = sc.nextInt();
@@ -65,6 +66,8 @@ public class InsertionScanner {
 	        annee = sc.nextInt();
 	        if(annee > 2000){break;}
         }
+        
+        // assemblage de la date
         String str = jour+"-"+lesMois.get(mois)+"-"+String.valueOf(annee).substring(2, 4);
 		return str;	
 	}
