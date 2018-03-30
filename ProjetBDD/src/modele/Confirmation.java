@@ -1,7 +1,6 @@
 package modele;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * 
@@ -19,14 +18,7 @@ public class Confirmation extends ActionSeminaire {
 		• annulation si le nombre d'inscriptions est insuffisant
 		• prévenir le prestataire (soit annulation, soit confirmation avec le nombre de personnes)
 		• bilan budgétaire si le séminaire a lieu
-		 */
-		
-		try {
-			req.creatSeminaire(conn);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		*/
 		
         //nombre d'inscriptions est insuffisant
 		/*
