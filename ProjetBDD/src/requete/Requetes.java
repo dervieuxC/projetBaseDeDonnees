@@ -19,16 +19,24 @@ import java.util.Scanner;
  * @author dervieco
  */
 public class Requetes {
-
-	public static void creatSeminaire(Connection conn) throws SQLException {
-        
+	/**
+	 * 
+	 * @param conn
+	 * @throws SQLException
+	 */
+	public static void creatSeminaire(Connection conn) throws SQLException {      
         Statement stmt = conn.createStatement();
         //int rs = stmt.executeUpdate("insert into  values ('"+id+"', '"+ jour +"-"+ mois +"-"+annee + "')");
         // Close the result set, statement and theconnection 
         stmt.close();
     }
-	//selcetionne les personnes qui sont des animateurs
-	public static void selectAnimateur(Connection conn)throws SQLException {
+	
+	/**
+	 * selcetion des personnes qui sont des animateurs/animatrices
+	 * @param conn
+	 * @throws SQLException
+	 */
+	public static void afficheAnimateurSelect(Connection conn)throws SQLException {
 		Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from Personnes where typePers='ACT'");
         while (rs.next()) {
