@@ -1,9 +1,16 @@
 package modele;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
+import application.InsertionScanner;
 import requete.Requetes;
 
 /**
@@ -17,21 +24,27 @@ public class Creation extends ActionSeminaire {
 
 	@Override
 	public void action(Connection conn) {
+		
 		//Créer un séminaire avec :
 		try {
-			//• animateur
-			
+			//• animateur			
 			Requetes.afficheAnimateurSelect(conn);
-			Scanner sc = new Scanner(System.in);
-	        int numAnimateur;
-	        System.out.println("Choisir un numéro d'animateur :");
-	        numAnimateur = sc.nextInt();
+			int numAnimateur = InsertionScanner.animateurNum();
+	        
+	        //• date
+	        
+	        String dateString = InsertionScanner.DateString();
+	        
+	        //• journée
+	        
+	        
 	        
 			//• programme initial (activités)
 			
+	        
+	        
 			//• le cas échéant, le ou les conférenciers, avec titre, transparents (dans les délais prévus),tarif de la prestation
 			
-			//• date
 			
 			//• nombre de places
 			
@@ -43,6 +56,7 @@ public class Creation extends ActionSeminaire {
 			
 			//• total des dépenses prévus (min, max)
 		 
+	        // INSERT INTO
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
