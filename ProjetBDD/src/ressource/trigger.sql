@@ -93,7 +93,7 @@ BEGIN
 		RAISE counterSupp3Excep;
 	END IF;
 EXCEPTION
-	WHEN counterSupp3Excep THEN DBMS_OUTPUT.PUT_LINE('Nombre d\'activite maximum atteint');
+	WHEN counterSupp3Excep THEN DBMS_OUTPUT.PUT_LINE('Nombre dactivite maximum atteint');
 	WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE('insertion correct');
 END;
 /
@@ -119,7 +119,7 @@ BEGIN
 		RAISE counterSupp6Excep;
 	END IF;
 EXCEPTION
-	WHEN counterSupp6Excep THEN DBMS_OUTPUT.PUT_LINE('Nombre d\'activite maximum atteint');
+	WHEN counterSupp6Excep THEN DBMS_OUTPUT.PUT_LINE('Nombre d activite maximum atteint');
 	WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE('insertion correct');
 END;
 /
@@ -177,7 +177,8 @@ END;
 --
 
 
-CREATE OR REPLACE TRIGGER nom_tigger BEFORE INSERT
+/*
+ * CREATE OR REPLACE TRIGGER nom_tigger BEFORE INSERT
 ON _table FOR EACH ROW
 DECLARE
 	
@@ -189,6 +190,8 @@ EXCEPTION
 	
 END;
 /
+ * 
+ */*/
 
 
 
