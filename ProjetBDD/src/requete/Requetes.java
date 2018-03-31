@@ -58,13 +58,19 @@ public class Requetes {
         stmt.close();
 	}
 	
-	public static void afficheSalleDispoSelect(Connection conn, String dateDuJour)throws SQLException {
+	/**
+	 * Affiche les prestataires disponibles à une date donnée
+	 * @param conn
+	 * @param dateDuJour
+	 * @throws SQLException
+	 */
+	public static void affichePrestaterSelect(Connection conn, String dateDuJour)throws SQLException {
 		Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT S.idSalle, S.libelleSalle, S.nbPlace "
-        							   + "FROM Salles S NATURAL JOIN Seminaire "
-        							   + "WHERE NOT (dateSemi = '"+ dateDuJour +"')");
+        ResultSet rs = stmt.executeQuery("SELECT P.idPres, P.libellePres"
+        							   + "FROM Prestataires P NATURAL JOIN Seminaire "
+        							   + "WHERE NOT(dateSemi = '"+ dateDuJour +"')");
         while (rs.next()) {
-            System.out.println(rs.getInt("idSalle") + " - "+ rs.getString("libelleAct")+" - "+ rs.getString("nbPlace"));
+            System.out.println(rs.getInt("idPres") + " - "+ rs.getString("libellePres"));
         }
         rs.close();
         stmt.close();
