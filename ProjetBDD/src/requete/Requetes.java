@@ -58,6 +58,18 @@ public class Requetes {
         stmt.close();
 	}
 	
+	public static void afficheSalleDispoSelect(Connection conn, String dateDuJour)throws SQLException {
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT S.idSalle, S.libelleSalle, S.nbPlace "
+        							   + "FROM Salles S NATURAL JOIN Seminaire "
+        							   + "WHERE NOT (dateSemi = '"+ dateDuJour +"')");
+        while (rs.next()) {
+            System.out.println(rs.getInt("idSalle") + " - "+ rs.getString("libelleAct")+" - "+ rs.getString("nbPlace"));
+        }
+        rs.close();
+        stmt.close();
+	} 
+	
 	/*
     public static void requeteAffSpe(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();

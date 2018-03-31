@@ -21,19 +21,19 @@ public class Creation extends ActionSeminaire {
 		
 		//Créer un séminaire avec :
 		try {
-			//• animateur			
+			//-------------------- animateur --------------------		
 			Requetes.afficheAnimateurSelect(conn);
-			int numAnimateur = InsertionScanner.animateurNum("Choisir un numéro d'animateur :");
+			int numAnimateur = InsertionScanner.choixPoposition("Choisir un numéro d'animateur :");
 	        
-	        //• date
+	        //-------------------- date --------------------
 	        
 	        String dateString = InsertionScanner.DateString("Déterminer une date :");
 	        
-	        //• journée
+	        //-------------------- journée --------------------
 	        
-	        int dureeSemi = InsertionScanner.dureeSeminaire("Choisir la durée du seminaire");
+	        int dureeSemi = InsertionScanner.choixBorner(0,2,"Choisir la durée du seminaire :(0 = matin | 1=après-midi | 2=journée)");
 	        		
-			//• programme initial (activités)
+			//-------------------- programme initial (activités) --------------------
 			
 	        Requetes.afficheActiviteSelect(conn);
 	        List<Integer> idActivite = InsertionScanner.activiteSelected(dureeSemi,"Choisir les avtivitées vouluent");
@@ -41,10 +41,12 @@ public class Creation extends ActionSeminaire {
 			//• le cas échéant, le ou les conférenciers, avec titre, transparents (dans les délais prévus),tarif de la prestation
 			
 			
-			//• nombre de places
-			
-	        /*affiche les salles qui sont disponoble ce jour
-	        int nbPlace = InsertionScanner.;*/
+			//-------------------- nombre de places --------------------
+	        /*Il est plus intéréssent de séléctionnée une salle qui à un nombre
+	          de place défini plutôt que demander un nombre dépourvue de sens.
+	         */
+	        Requetes.afficheSalleDispoSelect(conn, dateString);
+	        int numSalle = InsertionScanner.choixPoposition("Sélectionné parmi les propositions la salle qui vous semble adapter :");
 	        
 			//• tarif de l'inscription
 			
