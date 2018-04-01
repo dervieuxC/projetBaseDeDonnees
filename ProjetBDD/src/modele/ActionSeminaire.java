@@ -2,8 +2,6 @@ package modele;
 
 import java.sql.Connection;
 
-import requete.Requetes;
-
 /**
  * 
  * @author Corentin Dervieux
@@ -13,7 +11,5 @@ import requete.Requetes;
 public abstract class ActionSeminaire {
 
 	public abstract void action(Connection conn);
-	
-	protected Requetes req;
 	
 }

@@ -1,13 +1,10 @@
 package requete;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Scanner;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,16 +16,24 @@ import java.util.Scanner;
  * @author dervieco
  */
 public class Requetes {
-
-	public static void creatSeminaire(Connection conn) throws SQLException {
-        
+	/**
+	 * 
+	 * @param conn
+	 * @throws SQLException
+	 */
+	public static void creatSeminaire(Connection conn) throws SQLException {      
         Statement stmt = conn.createStatement();
         //int rs = stmt.executeUpdate("insert into  values ('"+id+"', '"+ jour +"-"+ mois +"-"+annee + "')");
-        // Close the result set, statement and theconnection 
+        // Close the result set, statement and the connection 
         stmt.close();
     }
-	//selcetionne les personnes qui sont des animateurs
-	public static void selectAnimateur(Connection conn)throws SQLException {
+	
+	/**
+	 * selcetion des personnes qui sont des animateurs/animatrices
+	 * @param conn
+	 * @throws SQLException
+	 */
+	public static void afficheAnimateurSelect(Connection conn)throws SQLException {
 		Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from Personnes where typePers='ACT'");
         while (rs.next()) {
@@ -37,6 +42,39 @@ public class Requetes {
         rs.close();
         stmt.close();
 	}
+	
+	/**
+	 * selcetion toutes activitées qui sont dans la bdd
+	 * @param conn
+	 * @throws SQLException
+	 */
+	public static void afficheActiviteSelect(Connection conn)throws SQLException {
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select * from Activite");
+        while (rs.next()) {
+            System.out.println(rs.getInt("idAct") + " - "+ rs.getString("libelleAct"));
+        }
+        rs.close();
+        stmt.close();
+	}
+	
+	/**
+	 * Affiche les prestataires disponibles à une date donnée
+	 * @param conn
+	 * @param dateDuJour
+	 * @throws SQLException
+	 */
+	public static void affichePrestaterSelect(Connection conn, String dateDuJour)throws SQLException {
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT P.idPres, P.libellePres"
+        							   + "FROM Prestataires P NATURAL JOIN Seminaire "
+        							   + "WHERE NOT(dateSemi = '"+ dateDuJour +"')");
+        while (rs.next()) {
+            System.out.println(rs.getInt("idPres") + " - "+ rs.getString("libellePres"));
+        }
+        rs.close();
+        stmt.close();
+	} 
 	
 	/*
     public static void requeteAffSpe(Connection conn) throws SQLException {
