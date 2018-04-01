@@ -47,15 +47,17 @@ public class Creation extends ActionSeminaire {
 			//-------------------- prestataire --------------------
 	        Requetes.affichePrestaterSelect(conn, dateString);
 	        int numPerstataire = InsertionScanner.saisirEntier("Choisir un prestataire :");
+	    /*********************************************************************/  
 	        
+	    /* JE SUIS PAS SUR */
 			//-------------------- total des recettes prévus (min, max) --------------------
-	        int recettePrevuMin = InsertionScanner.saisirEntier("Définir une recette minimal :");
-	        int recettePrevuMax = InsertionScanner.saisirEntier("Définir une recette maximal :");
+	        float recettePrevuMin = InsertionScanner.saisirDecimal("Définir une recette minimal :");
+	        float recettePrevuMax = InsertionScanner.saisirDecimal("Définir une recette maximal :");
 			
 	        //-------------------- total des dépenses prévus (min, max)--------------------
-	        int depencePrevuMin = InsertionScanner.saisirEntier("Définir une dépence minimal :");
-	        int depencePrevuMax = InsertionScanner.saisirEntier("Définir une dépence maximal :");
-		 
+	        float depencePrevuMin = InsertionScanner.saisirDecimal("Définir une dépence minimal :");
+	        float depencePrevuMax = InsertionScanner.saisirDecimal("Définir une dépence maximal :");
+	    /*********************************************************************/
 	        // INSERT INTO
 	        
 	        

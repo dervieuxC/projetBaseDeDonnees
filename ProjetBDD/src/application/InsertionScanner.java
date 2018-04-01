@@ -18,12 +18,14 @@ import java.util.Scanner;
  * 
  */
 public class InsertionScanner {
+	
 	/**
-	 * 
+	 * Attribut
 	 */
 	private static Scanner sc;
+	
 	/**
-	 * Constructeur private pour évité toute intanciation de l'objet
+	 * Constructeur private pour éviter toute intanciation de la class
 	 */
 	private InsertionScanner(){}
 	

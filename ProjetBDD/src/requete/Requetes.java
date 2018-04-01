@@ -24,7 +24,7 @@ public class Requetes {
 	public static void creatSeminaire(Connection conn) throws SQLException {      
         Statement stmt = conn.createStatement();
         //int rs = stmt.executeUpdate("insert into  values ('"+id+"', '"+ jour +"-"+ mois +"-"+annee + "')");
-        // Close the result set, statement and theconnection 
+        // Close the result set, statement and the connection 
         stmt.close();
     }
 	
