@@ -9,7 +9,7 @@ public class Start {
 		try{
 			ActionSeminaire semi;
 			
-	        int choix = InsertionScanner.choixBorner(1,4,"Choisir une commende :\n"
+	        int choix = InsertionScanner.saisirEntier(1,4,"Choisir une commende :\n"
 	        		+ " - 1 : création d'un séminaire\n"
 	        		+ " - 2 : Incription à un séminaire\n"
 	        		+ " - 3 : Confimation à un séminaire\n"

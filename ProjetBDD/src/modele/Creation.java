@@ -2,9 +2,11 @@ package modele;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import application.InsertionScanner;
+import modele.type.Conferencier;
 import requete.Requetes;
 
 /**
@@ -29,14 +31,27 @@ public class Creation extends ActionSeminaire {
 	        String dateString = InsertionScanner.DateString("Déterminer une date :");
 	        
 	        //-------------------- journée --------------------
-	        int dureeSemi = InsertionScanner.choixBorner(0,2,"Choisir la durée du seminaire :(0 = matin | 1=après-midi | 2=journée)");
+	        int dureeSemi = InsertionScanner.saisirEntier(0,2,"Choisir la durée du seminaire :(0 = matin | 1=après-midi | 2=journée)");
 	        		
 			//-------------------- programme initial (activités) --------------------
 	        Requetes.afficheActiviteSelect(conn);
 	        List<Integer> idActivite = InsertionScanner.activiteSelected(dureeSemi,"Choisir les avtivitées vouluent");
 	        
 			//• le cas échéant, le ou les conférenciers, avec titre, transparents (dans les délais prévus),tarif de la prestation
+			int nombreDeConferenciers = InsertionScanner.saisirEntier(0,"Saisir le nombre de conférenciers :");
 			
+			List<Conferencier> lesConferenciers =  new ArrayList<>();
+
+			for(int i =0; i<nombreDeConferenciers;i++){
+				System.out.println(" -- Ajoute nouveau conférencier : -- ");
+				
+				int numConferencier = InsertionScanner.saisirEntier("Entrer le numéro du conférencier :");
+				String titre = InsertionScanner.saisirString("Entrer le titre de la conférence :");
+				String  transparents = InsertionScanner.saisirString("Entrer les transparents :");
+				float prixDePrestation = InsertionScanner.saisirDecimal("Le prix de la prestation :");
+				
+				lesConferenciers.add(new Conferencier(numConferencier,titre,transparents,prixDePrestation));
+			}
 			
 			//-------------------- nombre de places --------------------
 	        int nombrePlace = InsertionScanner.saisirEntier("Définir le nombre de personne maximum qui vous semble adapter au séminaire:");
@@ -46,10 +61,8 @@ public class Creation extends ActionSeminaire {
 	        
 			//-------------------- prestataire --------------------
 	        Requetes.affichePrestaterSelect(conn, dateString);
-	        int numPerstataire = InsertionScanner.saisirEntier("Choisir un prestataire :");
-	    /*********************************************************************/  
+	        int numPerstataire = InsertionScanner.saisirEntier("Choisir un prestataire :");  
 	        
-	    /* JE SUIS PAS SUR */
 			//-------------------- total des recettes prévus (min, max) --------------------
 	        float recettePrevuMin = InsertionScanner.saisirDecimal("Définir une recette minimal :");
 	        float recettePrevuMax = InsertionScanner.saisirDecimal("Définir une recette maximal :");
@@ -57,7 +70,7 @@ public class Creation extends ActionSeminaire {
 	        //-------------------- total des dépenses prévus (min, max)--------------------
 	        float depencePrevuMin = InsertionScanner.saisirDecimal("Définir une dépence minimal :");
 	        float depencePrevuMax = InsertionScanner.saisirDecimal("Définir une dépence maximal :");
-	    /*********************************************************************/
+	        
 	        // INSERT INTO
 	        
 	        

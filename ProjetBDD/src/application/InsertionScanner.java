@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 
+
 /**
  * 
  * @author Thibaut Masselin
@@ -29,6 +30,38 @@ public class InsertionScanner {
 	 */
 	private InsertionScanner(){}
 	
+	
+	
+	
+	
+	/**
+	 * @info C'est une demande faite à l'utilisteur pour rentrer un 
+	 * 		 entier sans contrainte.
+	 *  
+	 * @param message affiche dans la console une indication 
+	 * 		  à destination de l'utilisateur
+	 * @return Le choix de l'utilisteur
+	 */
+	public static int saisirEntier(String message){
+		try{
+			sc = new Scanner(System.in);
+			System.out.println(message);
+			while(true){
+				try{
+					System.out.print(">");
+				    String str = sc.nextLine();
+					int value = Integer.parseInt(str.trim());
+				    return value;
+				}catch(Exception e){
+					System.err.println("Exception lever :" + e.getMessage());
+				}
+				System.err.println("Erreur de saisie !");
+			}
+		}finally{
+			sc.close();
+		}
+	}
+	
 	/**
 	 * @info Permet de selectionner la fonctionnalitée voulut par
 	 * 		l'utilisateur.
@@ -37,10 +70,11 @@ public class InsertionScanner {
 	 * 
 	 * @param min est la born inférieur
 	 * @param max est la born supérieur
-	 * @param message est à destination de l'utilisateur
+	 * @param message affiche dans la console une indication 
+	 * 		  à destination de l'utilisateur
 	 * @return Un entier entre les bornes min et max.
 	 */
-	public static int choixBorner(int min,int max,String message){
+	public static int saisirEntier(int min,int max,String message){
 		try{
 			sc = new Scanner(System.in);
 			int value;
@@ -65,11 +99,43 @@ public class InsertionScanner {
     }
 	
 	/**
-	 * @info Permet de saisir un décimal dans la console
+	 * @info C'est une demande faite à l'utilisteur pour rentrer un 
+	 * 		 entier égale ou suppérieur à suppEgal.
+	 * 
+	 * @param min est une borne minimum ou égale
+	 * @param message affiche dans la console une indication 
+	 * 		  à destination de l'utilisateur
+	 * @return Le choix de l'utilisteur
+	 */
+	public static int saisirEntier(int min,String message){
+		try{
+			sc = new Scanner(System.in);
+			System.out.println(message);
+			while(true){
+				try{
+					System.out.print(">");
+				    String str = sc.nextLine();
+					int value = Integer.parseInt(str.trim());
+					if(value >= min){
+						return value;
+					}
+				}catch(Exception e){
+					System.err.println("Exception lever :" + e.getMessage());
+				}
+				System.err.println("Erreur de saisie !");
+			}
+		}finally{
+			sc.close();
+		}
+	}
+	
+	/**
+	 * @info Permet de saisir un décimal dans la console sans contrainte
 	 * 
 	 * @request garentie la validitée du décimal saisie
 	 * 
-	 * @param message est à destination de l'utilisateur
+	 * @param message affiche dans la console une indication 
+	 * 		  à destination de l'utilisateur
 	 * @return Un décimal saisie
 	 */
 	public static float saisirDecimal(String message) {
@@ -94,40 +160,11 @@ public class InsertionScanner {
 	}
 	
 	/**
-	 * @info C'est une demande faite à l'utilisteur pour rentrer un 
-	 * 		 entier.
-	 * 
-	 * !!!!!! A revoir au niveau du traitement en créer une autre 
-	 * 		  méthode avec plus de paramètre pour plus de spécification !!!!!
-	 * 
-	 * @param message est à destination de l'utilisateur
-	 * @return Le choix de l'utilisteur
-	 */
-	public static int saisirEntier(String message){
-		try{
-			sc = new Scanner(System.in);
-			System.out.println(message);
-			while(true){
-				try{
-					System.out.print(">");
-				    String str = sc.nextLine();
-					int value = Integer.parseInt(str.trim());
-				    return value;
-				}catch(Exception e){
-					System.err.println("Exception lever :" + e.getMessage());
-				}
-				System.err.println("Erreur de saisie !");
-			}
-		}finally{
-			sc.close();
-		}
-	}
-	
-	/**
 	 * @info Permet à l'utilisateur de ne saisir que des date dans le futur
 	 * 		 au momment où il saisie le formulaire
 	 * 
-	 * @param message est à destination de l'utilisateur
+	 * @param message affiche dans la console une indication 
+	 * 		  à destination de l'utilisateur
 	 * @return la date sous form d'un string correctement fomé
 	 */
 	public static String DateString(String message){
@@ -145,25 +182,15 @@ public class InsertionScanner {
 			int mois , jour,annee;
 			
 			// Selectionne l'année
-	        System.out.println("entrez une année supérieur ou égal à "+anneAct+": ");
-	        while(true){ 
-		        try{
-		        	System.out.print(">");
-					String str = sc.nextLine();
-					annee = Integer.parseInt(str.trim());
-					if(annee >= anneAct){break;}
-		        }catch(Exception e){
-					System.err.println("Exception lever :" + e.getMessage());
-				}
-		        System.err.println("Erreur de saisie !");
-	        }
-			
-	        // Selectionne le mois
+			annee = InsertionScanner.saisirEntier(anneAct,"Entrer une année supérieur ou égal à "+anneAct+": ");
+	        
+			// pour connaitre le mois minimum possible
 	        int minMois = 1;
 	        if(annee == anneAct){
 	        	minMois = moisAct;
 	        }
-	        mois = InsertionScanner.choixBorner(minMois,12,"entrez le mois (1 - 12): ");
+	        // Selectionne le mois
+	        mois = InsertionScanner.saisirEntier(minMois,12,"entrez le mois (1 - 12): ");
 	        
 	        // pour conaître le nombre de jour du mois selectionner
 	        int maxJour = 31;
@@ -173,12 +200,14 @@ public class InsertionScanner {
 	        	maxJour = 30;
 	        }
 	        
-	        // Selectionne le jour
+	        // pour connaitre le jour minimum possible
 	        int minJour = 1;
 	        if(annee == anneAct && mois == moisAct){
 	        	minJour = jourAct;
 	        }
-	        jour = InsertionScanner.choixBorner(minJour,maxJour,"entrez le jour (1 - "+maxJour+"): ");
+	        
+	        // Selectionne le jour
+	        jour = InsertionScanner.saisirEntier(minJour,maxJour,"entrez le jour (1 - "+maxJour+"): ");
 
 	        //pour formé la strcture correct de la date final
 	        Map<Integer,String> lesMois = new HashMap<>();
@@ -204,14 +233,34 @@ public class InsertionScanner {
 		}
 	}
 	
-	
+	/**
+	 * @info Permet de saisir une chaîne de caratère dans 
+	 * 		 la console
+	 * 
+	 * @param message affiche dans la console une indication 
+	 * 		  à destination de l'utilisateur
+	 * @return Une chaîne de caratère
+	 */
+	public static String saisirString(String message){
+		System.out.println(message);
+		try{
+			sc = new Scanner(System.in);
+			System.out.print(">");
+			String str = sc.nextLine();
+			return str.trim();
+		}finally{
+			sc.close();
+		}
+		
+	}
 	
 	/**
 	 * @info Demmande a l'utilisateur de sélectionner des activitées en fonction
 	 * 		du paramètre dureeJour
 	 * 
 	 * @param dureeJour définit la période de temps
-	 * @param message est à destination de l'utilisateur
+	 * @param message affiche dans la console une indication 
+	 * 		  à destination de l'utilisateur
 	 * @return retourne une liste entier
 	 */
 	
@@ -221,7 +270,6 @@ public class InsertionScanner {
 		if(dureeJour == 2){
 			nbIter = 6;
 		}
-		System.out.println(message); 
 		for(int i = 0; i < nbIter;i++){
 			lesActivitees.add(InsertionScanner.saisirEntier("- Activité n°" +i+" : "));
 		}
