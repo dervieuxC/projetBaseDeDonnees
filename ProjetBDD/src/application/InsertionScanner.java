@@ -40,7 +40,7 @@ public class InsertionScanner {
 	 *  
 	 * @param message affiche dans la console une indication 
 	 * 		  à destination de l'utilisateur
-	 * @return Le choix de l'utilisteur
+	 * @return Un entier
 	 */
 	public static int saisirEntier(String message){
 		try{
@@ -105,7 +105,7 @@ public class InsertionScanner {
 	 * @param min est une borne minimum ou égale
 	 * @param message affiche dans la console une indication 
 	 * 		  à destination de l'utilisateur
-	 * @return Le choix de l'utilisteur
+	 * @return Un entier suppérieur à la borne min
 	 */
 	public static int saisirEntier(int min,String message){
 		try{

@@ -59,7 +59,7 @@ public class ConnexionBdd {
 	}
 
 	/**
-	 *  Instance de connexion
+	 *@info Instance de connexion
 	 */
 	private static void getInstance(){
 		if (connection == null) {
@@ -68,9 +68,8 @@ public class ConnexionBdd {
 	}
 	
 	/**
-	 *  Ferme la connection
+	 * @info Ferme la connection
 	 */
-	
 	public static void closeConnexion() {
 		try {
 			connection.close();

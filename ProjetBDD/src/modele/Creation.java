@@ -27,6 +27,10 @@ public class Creation extends ActionSeminaire {
 			Requetes.afficheAnimateurSelect(conn);
 			int numAnimateur = InsertionScanner.saisirEntier("Choisir un numéro d'animateur :");
 	        
+			//-------------------- Thème --------------------
+			Requetes.afficheThemeSelect(conn);
+			int numTheme = InsertionScanner.saisirEntier("Entrer le thème selcetionner :");
+			
 	        //-------------------- date --------------------
 	        String dateString = InsertionScanner.DateString("Déterminer une date :");
 	        
@@ -35,14 +39,14 @@ public class Creation extends ActionSeminaire {
 	        		
 			//-------------------- programme initial (activités) --------------------
 	        Requetes.afficheActiviteSelect(conn);
-	        List<Integer> idActivite = InsertionScanner.activiteSelected(dureeSemi,"Choisir les avtivitées vouluent");
+	        List<Integer> idActivite = InsertionScanner.activiteSelected(dureeSemi,"Choisir les avtivitées souhaiter :");
 	        
 			//• le cas échéant, le ou les conférenciers, avec titre, transparents (dans les délais prévus),tarif de la prestation
-			int nombreDeConferenciers = InsertionScanner.saisirEntier(0,"Saisir le nombre de conférenciers :");
 			
 			List<Conferencier> lesConferenciers =  new ArrayList<>();
 
-			for(int i =0; i<nombreDeConferenciers;i++){
+			while(InsertionScanner.saisirEntier(0,1," - 0 = Arrêter d'ajouter des conférenciers \n"
+												  + " - 1 = Ajouter un nouveau conférencier ") == 0){
 				System.out.println(" -- Ajoute nouveau conférencier : -- ");
 				
 				int numConferencier = InsertionScanner.saisirEntier("Entrer le numéro du conférencier :");
@@ -52,6 +56,7 @@ public class Creation extends ActionSeminaire {
 				
 				lesConferenciers.add(new Conferencier(numConferencier,titre,transparents,prixDePrestation));
 			}
+
 			
 			//-------------------- nombre de places --------------------
 	        int nombrePlace = InsertionScanner.saisirEntier("Définir le nombre de personne maximum qui vous semble adapter au séminaire:");

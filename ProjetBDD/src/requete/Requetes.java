@@ -13,7 +13,9 @@ import java.sql.Statement;
  */
 /**
  *
- * @author dervieco
+ * @author Corentin Dervieux
+ * @author Thibaut Masselin
+ * 
  */
 public class Requetes {
 	/**
@@ -76,18 +78,22 @@ public class Requetes {
         stmt.close();
 	} 
 	
-	/*
-    public static void requeteAffSpe(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("select * from LesSpectacles");
+	/**
+	 * Affiche les Thèmes présent dans la base de données
+	 * @param conn
+	 * @throws SQLException
+	 */
+	public static void afficheThemeSelect(Connection conn)throws SQLException {
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Themes");
         while (rs.next()) {
-            System.out.println("Les relations  " + rs.getInt("numS") + " : " + rs.getString("nomS"));
+            System.out.println(rs.getInt("idTheme") + " - "+ rs.getString("libelleTheme"));
         }
-        // Close the result set, statement and theconnection 
         rs.close();
         stmt.close();
-    }
-
+	} 
+	
+	/*
     public static void requeteNumToNom(Connection conn) throws SQLException {
         String id;
         Scanner sc = new Scanner(System.in);
@@ -97,48 +103,6 @@ public class Requetes {
         ResultSet rs = stmt.executeQuery("select nomS from LesSpectacles where numS=" + id);
         if (rs.next()) {
             System.out.println("nom Spectale : " + rs.getString(1) + " ");
-        } else {
-            System.out.println("numero spectacle incorrecte");
-        }
-        // Close the result set, statement and theconnection 
-        rs.close();
-        stmt.close();
-    }
-
-    public static void requeteNomToNum(Connection conn) throws SQLException {
-        String nom;
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Entrer un nom de Spectacle dont vous souhaitez avoir le numero :");
-        nom = sc.nextLine();
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("select numS from LesSpectacles where nomS='" + nom + "'");
-        if (rs.next()) {
-            System.out.println("numero Spectale : " + rs.getString(1) + " ");
-        } else {
-            System.out.println("nom spectacle incorrecte");
-        }
-        // Close the result set, statement and theconnection 
-        rs.close();
-        stmt.close();
-    }
-
-    public static void requeteNomRal(Connection conn) throws SQLException {
-        String id;
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Entrer un numero de Spectacle dont vous souhaitez avoir le nom et ces representations :");
-        id = sc.nextLine();
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("select nomS,dateRep from LesSpectacles natural left outer join LesRepresentations where numS=" + id);
-        if (rs.next()) {
-            System.out.println("nom du spectacle : " + rs.getString("nomS"));
-            if (rs.getDate(2)==null) {
-                System.out.println("Pas de representation pour ce spectacle");
-            } else {
-                do {
-                    System.out.println("Date de la representation : " + rs.getDate(2));
-                } while (rs.next());
-            }
-
         } else {
             System.out.println("numero spectacle incorrecte");
         }
