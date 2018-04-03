@@ -7,6 +7,7 @@ import java.util.List;
 
 import application.InsertionScanner;
 import modele.type.Conferencier;
+import modele.type.Seminaire;
 import requete.Requetes;
 
 /**
@@ -23,23 +24,26 @@ public class Creation extends ActionSeminaire {
 		
 		//Créer un séminaire avec :
 		try {
+			
+			Seminaire seminaire = new Seminaire();
+			
 			//-------------------- animateur --------------------		
 			Requetes.afficheAnimateurSelect(conn);
-			int numAnimateur = InsertionScanner.saisirEntier("Choisir un numéro d'animateur :");
+			seminaire.setNumAnimateur(InsertionScanner.saisirEntier("Choisir un numéro d'animateur :"));
 	        
 			//-------------------- Thème --------------------
 			Requetes.afficheThemeSelect(conn);
-			int numTheme = InsertionScanner.saisirEntier("Entrer le thème selcetionner :");
+			seminaire.setNumTheme(InsertionScanner.saisirEntier("Entrer le thème selcetionner :"));
 			
 	        //-------------------- date --------------------
-	        String dateString = InsertionScanner.DateString("Déterminer une date :");
+			seminaire.setDateString(InsertionScanner.DateStringOracle("Déterminer une date :"));
 	        
 	        //-------------------- journée --------------------
-	        int dureeSemi = InsertionScanner.saisirEntier(0,2,"Choisir la durée du seminaire :(0 = matin | 1=après-midi | 2=journée)");
+			seminaire.setDureeSemi(InsertionScanner.saisirEntier(0,2,"Choisir la durée du seminaire :(0 = matin | 1=après-midi | 2=journée)"));
 	        		
 			//-------------------- programme initial (activités) --------------------
 	        Requetes.afficheActiviteSelect(conn);
-	        List<Integer> idActivite = InsertionScanner.activiteSelected(dureeSemi,"Choisir les avtivitées souhaiter :");
+	        seminaire.setLesActivites(InsertionScanner.activiteSelected(seminaire.getDureeSemi(),"Choisir les avtivitées souhaiter :"));
 	        
 			//• le cas échéant, le ou les conférenciers, avec titre, transparents (dans les délais prévus),tarif de la prestation
 			
@@ -57,27 +61,31 @@ public class Creation extends ActionSeminaire {
 				lesConferenciers.add(new Conferencier(numConferencier,titre,transparents,prixDePrestation));
 			}
 
+			seminaire.setLesConferenciers(lesConferenciers);
 			
 			//-------------------- nombre de places --------------------
-	        int nombrePlace = InsertionScanner.saisirEntier("Définir le nombre de personne maximum qui vous semble adapter au séminaire:");
+			seminaire.setNombrePlace(InsertionScanner.saisirEntier("Définir le nombre de personne maximum qui vous semble adapter au séminaire:"));
 	        
 			//-------------------- tarif de l'inscription --------------------
-	        float prixUnePlace = InsertionScanner.saisirDecimal("Définir un prix pour une place :");
+			seminaire.setPrixUnePlace(InsertionScanner.saisirDecimal("Définir un prix pour une place :"));
 	        
 			//-------------------- prestataire --------------------
-	        Requetes.affichePrestaterSelect(conn, dateString);
-	        int numPerstataire = InsertionScanner.saisirEntier("Choisir un prestataire :");  
+	        Requetes.affichePrestaterSelect(conn, seminaire.getDateString());
+	        seminaire.setNumPerstataire(InsertionScanner.saisirEntier("Choisir un prestataire :"));  
 	        
 			//-------------------- total des recettes prévus (min, max) --------------------
-	        float recettePrevuMin = InsertionScanner.saisirDecimal("Définir une recette minimal :");
-	        float recettePrevuMax = InsertionScanner.saisirDecimal("Définir une recette maximal :");
+	        seminaire.setRecettePrevuMin(InsertionScanner.saisirDecimal("Définir une recette minimal :"));
+	        seminaire.setRecettePrevuMax(InsertionScanner.saisirDecimal("Définir une recette maximal :"));
 			
 	        //-------------------- total des dépenses prévus (min, max)--------------------
-	        float depencePrevuMin = InsertionScanner.saisirDecimal("Définir une dépence minimal :");
-	        float depencePrevuMax = InsertionScanner.saisirDecimal("Définir une dépence maximal :");
+	        seminaire.setDepencePrevuMin(InsertionScanner.saisirDecimal("Définir une dépence minimal :"));
+	        seminaire.setDepencePrevuMax(InsertionScanner.saisirDecimal("Définir une dépence maximal :"));
 	        
 	        // INSERT INTO
-	        
+	       
+	        // TODO: A voire pour les conférenciers
+	        // TODO: Discuter de comment mettre les 4 dèrnière varible dans la base de données
+	        Requetes.creatSeminaire(conn,seminaire);
 	        
 		} catch (SQLException e) {
 			System.err.println("Erreur base de données : "+ e.getMessage());

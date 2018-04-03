@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import modele.type.Seminaire;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,13 +19,15 @@ import java.sql.Statement;
  * @author Thibaut Masselin
  * 
  */
+
 public class Requetes {
 	/**
 	 * 
 	 * @param conn
+	 * @param seminaire
 	 * @throws SQLException
 	 */
-	public static void creatSeminaire(Connection conn) throws SQLException {      
+	public static void creatSeminaire(Connection conn, Seminaire seminaire) throws SQLException {      
         Statement stmt = conn.createStatement();
         //int rs = stmt.executeUpdate("insert into  values ('"+id+"', '"+ jour +"-"+ mois +"-"+annee + "')");
         // Close the result set, statement and the connection 
@@ -39,7 +43,7 @@ public class Requetes {
 		Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from Personnes where typePers='ACT'");
         while (rs.next()) {
-            System.out.println(rs.getInt("idPers") + " - "+ rs.getString("nomPers") + " " +rs.getString("prenomPers"));
+            System.out.println(" • " + rs.getInt("idPers") + " - "+ rs.getString("nomPers") + " " +rs.getString("prenomPers"));
         }
         rs.close();
         stmt.close();
@@ -54,7 +58,7 @@ public class Requetes {
 		Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from Activite");
         while (rs.next()) {
-            System.out.println(rs.getInt("idAct") + " - "+ rs.getString("libelleAct"));
+            System.out.println(" • " + rs.getInt("idAct") + " - "+ rs.getString("libelleAct"));
         }
         rs.close();
         stmt.close();
@@ -72,7 +76,7 @@ public class Requetes {
         							   + "FROM Prestataires P NATURAL JOIN Seminaire "
         							   + "WHERE NOT(dateSemi = '"+ dateDuJour +"')");
         while (rs.next()) {
-            System.out.println(rs.getInt("idPres") + " - "+ rs.getString("libellePres"));
+            System.out.println(" • " + rs.getInt("idPres") + " - "+ rs.getString("libellePres"));
         }
         rs.close();
         stmt.close();
@@ -87,7 +91,7 @@ public class Requetes {
 		Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Themes");
         while (rs.next()) {
-            System.out.println(rs.getInt("idTheme") + " - "+ rs.getString("libelleTheme"));
+            System.out.println(" • " + rs.getInt("idTheme") + " - "+ rs.getString("libelleTheme"));
         }
         rs.close();
         stmt.close();

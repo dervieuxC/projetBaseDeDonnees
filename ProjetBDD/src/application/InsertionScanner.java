@@ -35,8 +35,8 @@ public class InsertionScanner {
 	
 	
 	/**
-	 * @info C'est une demande faite à l'utilisteur pour rentrer un 
-	 * 		 entier sans contrainte.
+	 * C'est une demande faite à l'utilisteur pour rentrer un 
+	 * entier sans contrainte.
 	 *  
 	 * @param message affiche dans la console une indication 
 	 * 		  à destination de l'utilisateur
@@ -63,8 +63,8 @@ public class InsertionScanner {
 	}
 	
 	/**
-	 * @info Permet de selectionner la fonctionnalitée voulut par
-	 * 		l'utilisateur.
+	 * Permet de selectionner la fonctionnalitée voulut par
+	 * l'utilisateur.
 	 * 
 	 * @request garentie la validitée de l'entier saisie
 	 * 
@@ -99,8 +99,8 @@ public class InsertionScanner {
     }
 	
 	/**
-	 * @info C'est une demande faite à l'utilisteur pour rentrer un 
-	 * 		 entier égale ou suppérieur à suppEgal.
+	 * C'est une demande faite à l'utilisteur pour rentrer un 
+	 * entier égale ou suppérieur à suppEgal.
 	 * 
 	 * @param min est une borne minimum ou égale
 	 * @param message affiche dans la console une indication 
@@ -130,7 +130,7 @@ public class InsertionScanner {
 	}
 	
 	/**
-	 * @info Permet de saisir un décimal dans la console sans contrainte
+	 * Permet de saisir un décimal dans la console sans contrainte
 	 * 
 	 * @request garentie la validitée du décimal saisie
 	 * 
@@ -160,14 +160,16 @@ public class InsertionScanner {
 	}
 	
 	/**
-	 * @info Permet à l'utilisateur de ne saisir que des date dans le futur
-	 * 		 au momment où il saisie le formulaire
+	 * Permet à l'utilisateur de ne saisir que des date dans le futur
+	 * au momment où il saisie le formulaire
 	 * 
 	 * @param message affiche dans la console une indication 
 	 * 		  à destination de l'utilisateur
-	 * @return la date sous form d'un string correctement fomé
+	 * 
+	 * @return Une chaîne de caractère qui représente une
+	 * 			date sous le format ORACLE `dd-MMM-yy`
 	 */
-	public static String DateString(String message){
+	public static String DateStringOracle(String message){
 		try{
 			//recupérer les information sur la date actuelle
 			Calendar calendar =new GregorianCalendar();
@@ -234,8 +236,8 @@ public class InsertionScanner {
 	}
 	
 	/**
-	 * @info Permet de saisir une chaîne de caratère dans 
-	 * 		 la console
+	 * Permet de saisir une chaîne de caratère dans 
+	 * la console
 	 * 
 	 * @param message affiche dans la console une indication 
 	 * 		  à destination de l'utilisateur
@@ -255,8 +257,8 @@ public class InsertionScanner {
 	}
 	
 	/**
-	 * @info Demmande a l'utilisateur de sélectionner des activitées en fonction
-	 * 		du paramètre dureeJour
+	 * Demmande a l'utilisateur de sélectionner des activitées en fonction
+	 * du paramètre dureeJour
 	 * 
 	 * @param dureeJour définit la période de temps
 	 * @param message affiche dans la console une indication 
