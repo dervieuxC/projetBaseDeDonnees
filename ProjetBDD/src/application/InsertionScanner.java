@@ -23,17 +23,14 @@ public class InsertionScanner {
 	/**
 	 * Attribut
 	 */
-	private static Scanner sc;
+	private static Scanner sc = new Scanner(System.in);
 	
 	/**
 	 * Constructeur private pour éviter toute intanciation de la class
 	 */
 	private InsertionScanner(){}
 	
-	
-	
-	
-	
+
 	/**
 	 * C'est une demande faite à l'utilisteur pour rentrer un 
 	 * entier sans contrainte.
@@ -43,22 +40,17 @@ public class InsertionScanner {
 	 * @return Un entier
 	 */
 	public static int saisirEntier(String message){
-		try{
-			sc = new Scanner(System.in);
-			System.out.println(message);
-			while(true){
-				try{
-					System.out.print(">");
-				    String str = sc.nextLine();
-					int value = Integer.parseInt(str.trim());
-				    return value;
-				}catch(Exception e){
-					System.err.println("Exception lever :" + e.getMessage());
-				}
-				System.err.println("Erreur de saisie !");
+		System.out.println(message);
+		while(true){
+			try{
+				System.out.print(">");
+			    String str = sc.nextLine();
+				int value = Integer.parseInt(str.trim());
+			    return value;
+			}catch(Exception e){
+				System.err.println("Exception lever :" + e.getMessage());
 			}
-		}finally{
-			sc.close();
+			System.err.println("Erreur de saisie !");
 		}
 	}
 	
@@ -75,26 +67,21 @@ public class InsertionScanner {
 	 * @return Un entier entre les bornes min et max.
 	 */
 	public static int saisirEntier(int min,int max,String message){
-		try{
-			sc = new Scanner(System.in);
-			int value;
-			System.out.println(message);
-			while(true){
-				try{
-					System.out.print(">");
-					String str = sc.nextLine();
-					value = Integer.parseInt(str.trim());
-					if( value >= min && value <= max ){
-						return value;
-					}
-				}catch(Exception e){
-					System.err.println("Exception lever :" + e.getMessage());
+		int value;
+		System.out.println(message);
+		while(true){
+			try{
+				System.out.print(">");
+				String str = sc.nextLine();
+				value = Integer.parseInt(str.trim());
+				if( value >= min && value <= max ){
+					return value;
 				}
-				System.err.print("Erreur de saisie! ");
-				System.out.println("| Saisir entre ("+min+" - "+max+")");
+			}catch(Exception e){
+				System.err.println("Exception lever :" + e.getMessage());
 			}
-		}finally{
-			sc.close();
+			System.err.print("Erreur de saisie! ");
+			System.out.println("| Saisir entre ("+min+" - "+max+")");
 		}
     }
 	
@@ -108,24 +95,19 @@ public class InsertionScanner {
 	 * @return Un entier suppérieur à la borne min
 	 */
 	public static int saisirEntier(int min,String message){
-		try{
-			sc = new Scanner(System.in);
-			System.out.println(message);
-			while(true){
-				try{
-					System.out.print(">");
-				    String str = sc.nextLine();
-					int value = Integer.parseInt(str.trim());
-					if(value >= min){
-						return value;
-					}
-				}catch(Exception e){
-					System.err.println("Exception lever :" + e.getMessage());
+		System.out.println(message);
+		while(true){
+			try{
+				System.out.print(">");
+			    String str = sc.nextLine();
+				int value = Integer.parseInt(str.trim());
+				if(value >= min){
+					return value;
 				}
-				System.err.println("Erreur de saisie !");
+			}catch(Exception e){
+				System.err.println("Exception lever :" + e.getMessage());
 			}
-		}finally{
-			sc.close();
+			System.err.println("Erreur de saisie !");
 		}
 	}
 	
@@ -139,23 +121,18 @@ public class InsertionScanner {
 	 * @return Un décimal saisie
 	 */
 	public static float saisirDecimal(String message) {
-		try{
-			sc = new Scanner(System.in);
-			float value;
-			System.out.println(message);
-			while(true){
-				try{
-					System.out.print(">");
-					String str = sc.nextLine();
-					value = Float.parseFloat(str.trim());
-					return value;
-				}catch(Exception e){
-					System.err.println("Exception lever :" + e.getMessage());
-				}
-				System.err.print("Erreur de saisie! ");
+		float value;
+		System.out.println(message);
+		while(true){
+			try{
+				System.out.print(">");
+				String str = sc.nextLine();
+				value = Float.parseFloat(str.trim());
+				return value;
+			}catch(Exception e){
+				System.err.println("Exception lever :" + e.getMessage());
 			}
-		}finally{
-			sc.close();
+			System.err.print("Erreur de saisie! ");
 		}
 	}
 	
@@ -170,69 +147,63 @@ public class InsertionScanner {
 	 * 			date sous le format ORACLE `dd-MMM-yy`
 	 */
 	public static String DateStringOracle(String message){
-		try{
-			//recupérer les information sur la date actuelle
-			Calendar calendar =new GregorianCalendar();
-			calendar.setTime(new Date());
-			int anneAct = calendar.get(Calendar.YEAR);
-			int moisAct = calendar.get(Calendar.MONTH);
-			int jourAct = calendar.get(Calendar.DAY_OF_MONTH);
-			
-			sc = new Scanner(System.in);
-			
-			System.out.println(message);
-			int mois , jour,annee;
-			
-			// Selectionne l'année
-			annee = InsertionScanner.saisirEntier(anneAct,"Entrer une année supérieur ou égal à "+anneAct+": ");
-	        
-			// pour connaitre le mois minimum possible
-	        int minMois = 1;
-	        if(annee == anneAct){
-	        	minMois = moisAct;
-	        }
-	        // Selectionne le mois
-	        mois = InsertionScanner.saisirEntier(minMois,12,"entrez le mois (1 - 12): ");
-	        
-	        // pour conaître le nombre de jour du mois selectionner
-	        int maxJour = 31;
-	        if(mois == 2){
-	        	maxJour = 28;
-	        }else if(mois == 4 || mois == 6 || mois == 9 || mois == 11){
-	        	maxJour = 30;
-	        }
-	        
-	        // pour connaitre le jour minimum possible
-	        int minJour = 1;
-	        if(annee == anneAct && mois == moisAct){
-	        	minJour = jourAct;
-	        }
-	        
-	        // Selectionne le jour
-	        jour = InsertionScanner.saisirEntier(minJour,maxJour,"entrez le jour (1 - "+maxJour+"): ");
+		//recupérer les information sur la date actuelle
+		Calendar calendar =new GregorianCalendar();
+		calendar.setTime(new Date());
+		int anneAct = calendar.get(Calendar.YEAR);
+		int moisAct = calendar.get(Calendar.MONTH)+1; // +1 pour le mois car Janvier == 0
+		int jourAct = calendar.get(Calendar.DAY_OF_MONTH);
+		
+		System.out.println(message);
+		int mois , jour,annee;
+		
+		// Selectionne l'année
+		annee = InsertionScanner.saisirEntier(anneAct,"Entrer une année supérieur ou égal à "+anneAct+": ");
+        
+		// pour connaitre le mois minimum possible
+        int minMois = 1;
+        if(annee == anneAct){
+        	minMois = moisAct;
+        }
+        // Selectionne le mois
+        mois = InsertionScanner.saisirEntier(minMois,12,"entrez le mois ("+minMois+" - 12): ");
+        
+        // pour conaître le nombre de jour du mois selectionner
+        int maxJour = 31;
+        if(mois == 2){
+        	maxJour = 28;
+        }else if(mois == 4 || mois == 6 || mois == 9 || mois == 11){
+        	maxJour = 30;
+        }
+        
+        // pour connaitre le jour minimum possible
+        int minJour = 1;
+        if(annee == anneAct && mois == moisAct){
+        	minJour = jourAct;
+        }
+        
+        // Selectionne le jour
+        jour = InsertionScanner.saisirEntier(minJour,maxJour,"entrez le jour ("+minJour+" - "+maxJour+"): ");
 
-	        //pour formé la strcture correct de la date final
-	        Map<Integer,String> lesMois = new HashMap<>();
-			lesMois.put(1, "JAN");
-			lesMois.put(2, "FEB");
-			lesMois.put(3, "MAR");
-			lesMois.put(4, "APR");
-			lesMois.put(5, "MAY");
-			lesMois.put(6, "JUN");
-			lesMois.put(7, "JUL");
-			lesMois.put(8, "AUG");
-			lesMois.put(9, "SEP");
-			lesMois.put(10, "OCT");
-			lesMois.put(11, "NOV");
-			lesMois.put(12, "DEC");
-	        
-	        // assemblage de la date
-	        String str = jour+"-"+lesMois.get(mois)+"-"+String.valueOf(annee).substring(2, 4);
-	        
-			return str;
-		}finally{
-			sc.close();
-		}
+        //pour formé la strcture correct de la date final
+        Map<Integer,String> lesMois = new HashMap<>();
+		lesMois.put(1, "JAN");
+		lesMois.put(2, "FEB");
+		lesMois.put(3, "MAR");
+		lesMois.put(4, "APR");
+		lesMois.put(5, "MAY");
+		lesMois.put(6, "JUN");
+		lesMois.put(7, "JUL");
+		lesMois.put(8, "AUG");
+		lesMois.put(9, "SEP");
+		lesMois.put(10, "OCT");
+		lesMois.put(11, "NOV");
+		lesMois.put(12, "DEC");
+        
+        // assemblage de la date
+        String str = jour+"-"+lesMois.get(mois)+"-"+String.valueOf(annee).substring(2, 4);
+        
+		return str;
 	}
 	
 	/**
@@ -245,15 +216,9 @@ public class InsertionScanner {
 	 */
 	public static String saisirString(String message){
 		System.out.println(message);
-		try{
-			sc = new Scanner(System.in);
-			System.out.print(">");
-			String str = sc.nextLine();
-			return str.trim();
-		}finally{
-			sc.close();
-		}
-		
+		System.out.print(">");
+		String str = sc.nextLine();
+		return str.trim();	
 	}
 	
 	/**

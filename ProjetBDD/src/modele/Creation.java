@@ -77,6 +77,10 @@ public class Creation extends ActionSeminaire {
 	        seminaire.setRecettePrevuMin(InsertionScanner.saisirDecimal("Définir une recette minimal :"));
 	        seminaire.setRecettePrevuMax(InsertionScanner.saisirDecimal("Définir une recette maximal :"));
 			
+	        // valeur calculer
+	        // max +20%
+	        // min moitierDesParticipant
+	        
 	        //-------------------- total des dépenses prévus (min, max)--------------------
 	        seminaire.setDepencePrevuMin(InsertionScanner.saisirDecimal("Définir une dépence minimal :"));
 	        seminaire.setDepencePrevuMax(InsertionScanner.saisirDecimal("Définir une dépence maximal :"));
@@ -86,6 +90,9 @@ public class Creation extends ActionSeminaire {
 	        // TODO: A voire pour les conférenciers
 	        // TODO: Discuter de comment mettre les 4 dèrnière varible dans la base de données
 	        Requetes.creatSeminaire(conn,seminaire);
+	        //Organise
+	        //FaitUneConf
+	        //Prevue
 	        
 		} catch (SQLException e) {
 			System.err.println("Erreur base de données : "+ e.getMessage());
