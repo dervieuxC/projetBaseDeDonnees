@@ -31,6 +31,10 @@ public class Creation extends ActionSeminaire {
 			Requetes.afficheAnimateurSelect(conn);
 			seminaire.setNumAnimateur(InsertionScanner.saisirEntier("Choisir un numéro d'animateur :"));
 	        
+			//-------------------- Titre Séminaire --------------------		
+			seminaire.setLibelle(InsertionScanner.saisirString("Choisir un numéro d'animateur :"));
+	        
+			
 			//-------------------- Thème --------------------
 			Requetes.afficheThemeSelect(conn);
 			seminaire.setNumTheme(InsertionScanner.saisirEntier("Entrer le thème selcetionner :"));
@@ -47,21 +51,8 @@ public class Creation extends ActionSeminaire {
 	        
 			//• le cas échéant, le ou les conférenciers, avec titre, transparents (dans les délais prévus),tarif de la prestation
 			
-			List<Conferencier> lesConferenciers =  new ArrayList<>();
+	        this.ajouterDesConferencier(seminaire);
 
-			while(InsertionScanner.saisirEntier(0,1," - 0 = Arrêter d'ajouter des conférenciers \n"
-												  + " - 1 = Ajouter un nouveau conférencier ") == 0){
-				System.out.println(" -- Ajoute nouveau conférencier : -- ");
-				
-				int numConferencier = InsertionScanner.saisirEntier("Entrer le numéro du conférencier :");
-				String titre = InsertionScanner.saisirString("Entrer le titre de la conférence :");
-				String  transparents = InsertionScanner.saisirString("Entrer les transparents :");
-				float prixDePrestation = InsertionScanner.saisirDecimal("Le prix de la prestation :");
-				
-				lesConferenciers.add(new Conferencier(numConferencier,titre,transparents,prixDePrestation));
-			}
-
-			seminaire.setLesConferenciers(lesConferenciers);
 			
 			//-------------------- nombre de places --------------------
 			seminaire.setNombrePlace(InsertionScanner.saisirEntier("Définir le nombre de personne maximum qui vous semble adapter au séminaire:"));
@@ -89,8 +80,12 @@ public class Creation extends ActionSeminaire {
 	       
 	        // TODO: A voire pour les conférenciers
 	        // TODO: Discuter de comment mettre les 4 dèrnière varible dans la base de données
-	        Requetes.creatSeminaire(conn,seminaire);
-	        //Organise
+	        Requetes.insertSeminaire(conn,seminaire);
+	        Requetes.insertOrganise(conn, seminaire);
+	        
+	        if(seminaire.getLesConferenciers().size() > 0){
+	        	insertionDesConférencier(conn,seminaire);
+	        }
 	        //FaitUneConf
 	        //Prevue
 	        
@@ -98,6 +93,30 @@ public class Creation extends ActionSeminaire {
 			System.err.println("Erreur base de données : "+ e.getMessage());
 			e.printStackTrace();
 		}
+	}
+	
+	private void ajouterDesConferencier(Seminaire seminaire){
+		List<Conferencier> lesConferenciers =  new ArrayList<>();
+		while(InsertionScanner.saisirEntier(0,1," - 0 = Arrêter d'ajouter des conférenciers \n"
+											  + " - 1 = Ajouter un nouveau conférencier ") == 0){
+			System.out.println(" -- Ajoute nouveau conférencier : -- ");
+			
+			int numConferencier = InsertionScanner.saisirEntier("Entrer le numéro du conférencier :");
+			String titre = InsertionScanner.saisirString("Entrer le titre de la conférence :");
+			String  transparents = InsertionScanner.saisirString("Entrer les transparents :");
+			float prixDePrestation = InsertionScanner.saisirDecimal("Le prix de la prestation :");
+			
+			lesConferenciers.add(new Conferencier(numConferencier,titre,transparents,prixDePrestation));
+		}
+		seminaire.setLesConferenciers(lesConferenciers);
+		// Pour savoir si il y a quelque chose à ajouter
+	}
+	
+	private void insertionDesConférencier(Connection conn, Seminaire seminaire) throws SQLException{
+		for(Conferencier c : seminaire.getLesConferenciers()){
+			Requetes.insertFaitUneConf(conn, seminaire.getNumSeminaire(), c);
+		}
+		
 	}
 	
 }

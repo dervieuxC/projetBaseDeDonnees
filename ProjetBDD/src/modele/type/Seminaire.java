@@ -10,8 +10,10 @@ import java.util.List;
 public class Seminaire {
 	
 	//Attributs
+	private int numSeminaire;
 	private int numAnimateur;
 	private int numTheme;
+	private String libelle;
 	private String dateString;
 	private int dureeSemi;
 	private List<Integer> lesActivites;
@@ -133,6 +135,22 @@ public class Seminaire {
 
 	public void setDepencePrevuMax(float depencePrevuMax) {
 		this.depencePrevuMax = depencePrevuMax;
+	}
+
+	public int getNumSeminaire() {
+		return numSeminaire;
+	}
+
+	public void setNumSeminaire(int numSeminaire) {
+		this.numSeminaire = numSeminaire;
+	}
+
+	public String getLibelle() {
+		return libelle;
+	}
+
+	public void setLibelle(String libelle) {
+		this.libelle = libelle;
 	}
 	
 	
