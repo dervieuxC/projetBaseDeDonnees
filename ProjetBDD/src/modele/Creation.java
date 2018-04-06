@@ -39,7 +39,7 @@ public class Creation extends ActionSeminaire {
 			seminaire.setEtatSemi("ATT");
 			
 			//-------------------- animateur --------------------		
-			Requetes.afficheAnimateurSelect(conn);
+			Requetes.affichePersonneSelect(conn,"ACT");
 			seminaire.setNumAnimateur(InsertionScanner.saisirEntier("Choisir un numéro d'animateur :"));
 	        
 			//-------------------- Titre Séminaire --------------------		
@@ -68,7 +68,7 @@ public class Creation extends ActionSeminaire {
 	        
 			//• le cas échéant, le ou les conférenciers, avec titre, transparents (dans les délais prévus),tarif de la prestation
 			
-	        this.ajouterDesConferencier(seminaire);
+	        this.ajouterDesConferencier(conn,seminaire);
 
 			
 			//-------------------- nombre de places --------------------
@@ -78,7 +78,7 @@ public class Creation extends ActionSeminaire {
 			seminaire.setPrixUnePlace(InsertionScanner.saisirDecimal("Définir un prix pour une place :"));
 	        
 			//-------------------- prestataire --------------------
-	        Requetes.affichePrestaterSelect(conn, seminaire.getDateToString());
+	        Requetes.affichePrestataireSelect(conn, seminaire.getDateToString());
 	        seminaire.setNumPerstataire(InsertionScanner.saisirEntier("Choisir un prestataire :"));  
 	        
 			//-------------------- total des recettes prévus (min, max) --------------------
@@ -111,13 +111,14 @@ public class Creation extends ActionSeminaire {
 	
 	/**
 	 * Permet de créer des conférenciers
+	 * @throws SQLException 
 	 */
-	private void ajouterDesConferencier(Seminaire seminaire){
+	private void ajouterDesConferencier(Connection conn,Seminaire seminaire) throws SQLException{
 		List<Conferencier> lesConferenciers =  new ArrayList<>();
 		while(InsertionScanner.saisirEntier(0,1," - 0 = Arrêter d'ajouter des conférenciers \n"
 											  + " - 1 = Ajouter un nouveau conférencier ") == 0){
 			System.out.println(" -- Ajoute nouveau conférencier : -- ");
-			
+			Requetes.affichePersonneSelect(conn,"CON");
 			int numConferencier = InsertionScanner.saisirEntier("Entrer le numéro du conférencier :");
 			String titre = InsertionScanner.saisirString("Entrer le titre de la conférence :");
 			String  transparents = InsertionScanner.saisirString("Entrer les transparents :");
