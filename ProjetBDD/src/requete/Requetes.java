@@ -20,6 +20,10 @@ import modele.type.Seminaire;
 
 public class Requetes {
 	
+	//***************************************************************************************//
+	//Les Inserts
+	//***************************************************************************************//
+	
 	/**
 	 * Ajouter un Séminaire dans la base de données
 	 * @param conn permet d'utiliser la connexion
@@ -37,7 +41,7 @@ public class Requetes {
 					  + " "+seminaire.getNombrePlace()+ ","
 					  + " "+seminaire.getNumTheme()+ ","
 					  + " "+seminaire.getNumPerstataire()+","
-					  + "  NULL,"// Il reste la salle
+					  + " "+seminaire.getNumSalle()+","
 					  + " "+seminaire.getNumRepas()+","
 					  + " "+seminaire.getRecettePrevuMin()+","
 					  + " "+seminaire.getDepencePrevuMax()+","
@@ -59,7 +63,7 @@ public class Requetes {
         int rs = stmt.executeUpdate("insert into FaitUneConf values ("+conferencier.getNumConferencier()
         				+ ","+idSemi
 						+ "," +conferencier.getPrixDePrestation()
-						+ ",'"+conferencier.getTransparents()
+						+ ",'"+conferencier.getTransparents()+"'"
 						+ ",'"+conferencier.getTitre()+"')");
         // Close the result set, statement and the connection 
         stmt.close();
@@ -93,6 +97,25 @@ public class Requetes {
     }
 	
 	/**
+	 * Ajouter Une pause
+	 * @param conn permet d'utiliser la connexion
+	 * @param idSemi
+	 * @param idPause
+	 * @throws SQLException
+	 */
+	public static void insertUnePause(Connection conn, int idSemi,int idPause) throws SQLException {      
+        Statement stmt = conn.createStatement();
+        int rs = stmt.executeUpdate("insert into PauseSemi values ("+idSemi+","+idPause+")");
+        // Close the result set, statement and the connection 
+        stmt.close();
+    }
+	
+
+	//***************************************************************************************//
+	//Les Affiches
+	//***************************************************************************************//
+	
+	/**
 	 * selcetion les repas qui sont présent dans la base de données
 	 * @param conn permet d'utiliser la connexion
 	 * @throws SQLException
@@ -116,13 +139,33 @@ public class Requetes {
 		Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from Personnes where typePers='"+typeP+"'");
         while (rs.next()) {
-            System.out.println(" • " + rs.getInt("idPers") + " - "+ rs.getString("nomPers") + ""
+            System.out.println(" • " + rs.getInt("idPers") + " - "+ rs.getString("nomPers")
             		+ " " +rs.getString("prenomPers"));
         }
         rs.close();
         stmt.close();
 	}
 	
+	/**
+	 * affiche toutes les pauses
+	 * 
+	 * @param conn
+	 * @param nbPlace
+	 * @param numPerstataire
+	 * @return Une Liste de salles
+	 * @throws SQLException
+	 */
+	public static void afficheLesPause(Connection conn,int numPerstataire)throws SQLException {
+
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Pauses natural join PrixPauses natural join Prestataires "
+        								+ "where idPres="+numPerstataire);
+        while (rs.next()) {
+        	System.out.println(rs.getInt("idPause") + " - " + rs.getString("libellePause")+" prix:"+ rs.getFloat("prix"));
+        }
+        rs.close();
+        stmt.close();
+	}
 	
 	/**
 	 * selcetion toutes activitées qui sont dans la bdd
@@ -131,23 +174,11 @@ public class Requetes {
 	 */
 	public static void afficheActiviteSelect(Connection conn)throws SQLException {
 		Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("select * from Activite");
+        ResultSet rs = stmt.executeQuery("select * from Activites");
         while (rs.next()) {
             System.out.println(" • " + rs.getInt("idAct") + " - "+ rs.getString("libelleAct"));
         }
         rs.close();
-        stmt.close();
-	}
-	
-	/**
-	 * mise à jour de la Salles
-	 * @param conn permet d'utiliser la connexion
-	 * @throws SQLException
-	 */
-	public static void updateSalle(Connection conn,int numSalle, int numSeminaire)throws SQLException {
-		Statement stmt = conn.createStatement();
-        int rs = stmt.executeUpdate("UPDATE Seminaire SET idSalle="+numSalle+" WHERE idSemi="+numSeminaire+"");
-        // Close the result set, statement and the connection 
         stmt.close();
 	}
 	
@@ -160,7 +191,7 @@ public class Requetes {
 	public static void affichePrestataireSelect(Connection conn, String dateDuJour)throws SQLException {
 		Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT P.idPres, P.libellePres"
-        							   + "FROM Prestataires P NATURAL JOIN Seminaire "
+        							   + "FROM Prestataires P NATURAL JOIN Seminaires "
         							   + "WHERE NOT(dateSemi = '"+ dateDuJour +"')");
         while (rs.next()) {
             System.out.println(" • " + rs.getInt("idPres") + " - "+ rs.getString("libellePres"));
@@ -184,6 +215,7 @@ public class Requetes {
         stmt.close();
 	} 
 
+	///Les Selects
 	/**
 	 * Selectionne le numéro du séminaire maximum +1
 	 * @param conn permet d'utiliser la connexion
@@ -197,7 +229,7 @@ public class Requetes {
 	public static int selectMaxSeminaire(Connection conn)throws SQLException {
 		int idSeminaire = 1;
 		Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT MAX(idSemi) FROM Seminaire");
+        ResultSet rs = stmt.executeQuery("SELECT MAX(idSemi) FROM Seminaires");
         if (rs.next()) {
         	idSeminaire = rs.getInt("idSemi") + 1;
         }
@@ -213,11 +245,11 @@ public class Requetes {
 	 * 
 	 * @return Une list de Séminaire
 	 */
-	public static List<Seminaire> selectLesSeminaire(Connection conn)throws SQLException {
+	public static List<Seminaire> selectLesSeminaireEnATT(Connection conn)throws SQLException {
 		List<Seminaire> seminaires = new ArrayList<>();
 		Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM Seminaire where  etatSemi =='ATT' AND"
-        							+ " sysdate >= dateSemi");
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Seminaires where  etatSemi ='ATT' AND"
+        							+ " sysdate <= dateSemi");
         while (rs.next()) {
         	Seminaire seminaire = new Seminaire();
         	seminaire.setDate(rs.getDate("dateSemi"));
@@ -226,6 +258,36 @@ public class Requetes {
         	seminaire.setNombrePlace(rs.getInt("nbPers"));
         	seminaire.setNumPerstataire(rs.getInt("idPres"));
         	seminaire.setNumSeminaire(rs.getInt("idSemi"));
+        	seminaire.setNumSalle(rs.getInt("idSalle"));
+        	seminaire.setNumSalle(rs.getInt("idRepa"));
+        	seminaires.add(seminaire);
+        }
+        rs.close();
+        stmt.close();
+        return seminaires;
+	} 
+	
+	/**
+	 * Selectionne tous les séminaires en confirmé
+	 * @param conn permet d'utiliser la connexion
+	 * @throws SQLException
+	 * 
+	 * @return Une list de Séminaire
+	 */
+	public static List<Seminaire> selectLesSeminaireCON(Connection conn)throws SQLException {
+		List<Seminaire> seminaires = new ArrayList<>();
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Seminaires where  etatSemi ='CON' AND sysdate <= dateSemi");
+        while (rs.next()) {
+        	Seminaire seminaire = new Seminaire();
+        	seminaire.setDate(rs.getDate("dateSemi"));
+        	//Si jamais il y a un problème avec la date utilise : seminaire.setDate(rs.getString("dateSemi"));
+        	seminaire.setLibelle(rs.getString("libelleSemi"));
+        	seminaire.setNombrePlace(rs.getInt("nbPers"));
+        	seminaire.setNumPerstataire(rs.getInt("idPres"));
+        	seminaire.setNumSeminaire(rs.getInt("idSemi"));
+        	seminaire.setNumSalle(rs.getInt("idSalle"));
+        	seminaire.setNumSalle(rs.getInt("idRepa"));
         	seminaires.add(seminaire);
         }
         rs.close();
@@ -238,23 +300,22 @@ public class Requetes {
 	 * sufisante avec un perstataire
 	 * 
 	 * @param conn
-	 * @param nbPlace
-	 * @param numPerstataire
+	 * @param semi
 	 * @return Une Liste de salles
 	 * @throws SQLException
 	 */
-	public static List<Salle> selectLesSalles(Connection conn, int nbPlace, int numPerstataire)throws SQLException {
+	public static List<Salle> selectLesSalles(Connection conn,Seminaire semi)throws SQLException {
 		List<Salle>  salles = new ArrayList<>();
 		Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT S.idSalle, S.libelleSalle, S.nbPlace, P.prix, "
         					+ "FROM PrixSalles P natural join Salles S "
-        					+ "WHERE S.nbPlace >= "+ nbPlace
-        					+ "AND P.idPres == " + numPerstataire);
+        					+ "WHERE S.nbPlace >= "+ semi.getNombrePlace()
+        					+ "AND P.idPres = " + semi.getNumPerstataire());
         while (rs.next()) {
         	Salle sal = new Salle();
         	sal.setNumSalle(rs.getInt("idSalle"));
         	sal.setNombrePlace(rs.getInt("nbPlace"));
-        	sal.setNumPrestataire(numPerstataire);
+        	sal.setNumPrestataire(semi.getNumPerstataire());
         	sal.setLibelle(rs.getString("libelleSalle"));
         	sal.setPrix(rs.getFloat("prix"));
         	salles.add(sal);
@@ -265,17 +326,17 @@ public class Requetes {
 	}
 	
 	/**
-	 * 
+	 * Total du prix des conférenciers pour un Séminaire
 	 * @param conn
-	 * @param NumSemi
-	 * @return
+	 * @param semi
+	 * @return Un Décimal
 	 * @throws SQLException
 	 */
-	public static float selectLesTotal(Connection conn, int NumSemi) throws SQLException{
+	public static float selectLeTotalConf(Connection conn, Seminaire semi) throws SQLException{
 		float toto = 0;
 		Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT F.prix"
-        							+ "FROM Seminaires Semi natural join FaitUneConf  F");
+        ResultSet rs = stmt.executeQuery("SELECT prix FROM Seminaires natural join FaitUneConf"
+        			+ "Where idSemi="+ semi.getNumSeminaire());
         while(rs.next()){
         	toto +=  rs.getFloat("prix");
         }
@@ -283,4 +344,78 @@ public class Requetes {
         stmt.close();
 		return toto;
 	}
+	
+	/**
+	 * Total du prix des repas pour un séminaire
+	 * @param conn
+	 * @param semi
+	 * @return Un Décimal
+	 * @throws SQLException
+	 */
+	public static float selectLeTotalRepat(Connection conn, Seminaire semi) throws SQLException{
+		float toto = 0;
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT prix"
+        							+ "FROM Seminaires natural join PrixRepas Where idSemi="+ semi.getNumSeminaire());
+        while(rs.next()){
+        	toto +=  rs.getFloat("prix");
+        }
+        rs.close();
+        stmt.close();
+		return toto;
+	}
+	
+	/**
+	 * Total du prix des pauses pour un séminaire
+	 * @param conn
+	 * @param semi
+	 * @return
+	 * @throws SQLException
+	 */
+	public static float selectLeTotalPause(Connection conn, Seminaire semi) throws SQLException{
+		float toto = 0;
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select prix from PrixPauses natural join PauseSemi Where idSemi="+ semi.getNumSeminaire());
+        while(rs.next()){
+        	toto +=  rs.getFloat("prix");
+        }
+        rs.close();
+        stmt.close();
+		return toto;
+	}
+	
+	/**
+	 * Total du prix de la salle
+	 * @param conn
+	 * @param semi
+	 * @return
+	 * @throws SQLException
+	 */
+	public static float selectPrixSalle(Connection conn, Seminaire semi) throws SQLException{
+		float toto = 0;
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select prix from PrixSalles Where idSemi="+ semi.getNumSeminaire());
+        while(rs.next()){
+        	toto +=  rs.getFloat("prix");
+        }
+        rs.close();
+        stmt.close();
+		return toto;
+	}
+	//***************************************************************************************//
+	//Les Updates
+	//***************************************************************************************//
+	/**
+	 * mise à jour de l'etat du séminaire
+	 * @param semi
+	 * @throws SQLException
+	 */
+	public static void updateSeminaireEtat(Connection conn,Seminaire semi) throws SQLException{
+		Statement stmt = conn.createStatement();
+        int rs = stmt.executeUpdate("UPDATE Seminaire SET etatSemi="+semi.getEtatSemi()+"  Where idSemi="+ semi.getNumSeminaire());
+        // Close the result set, statement and the connection 
+        stmt.close();
+	}
+	
+	
 }

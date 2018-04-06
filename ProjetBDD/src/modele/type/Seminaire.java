@@ -18,7 +18,7 @@ public class Seminaire {
 	private int numAnimateur;
 	private int numTheme;
 	private String libelle;
-	
+	private int NumSalle;
 	private Date dateString;
 	
 	private String etatSemi; 
@@ -205,6 +205,14 @@ public class Seminaire {
 
 	public void setEtatSemi(String etatSemi) {
 		this.etatSemi = etatSemi;
+	}
+
+	public int getNumSalle() {
+		return NumSalle;
+	}
+
+	public void setNumSalle(int numSalle) {
+		NumSalle = numSalle;
 	}
 	
 }

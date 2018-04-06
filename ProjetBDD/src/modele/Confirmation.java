@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import application.InsertionScanner;
+import exception.SQLWarningsExceptions;
 import modele.type.Salle;
 import modele.type.Seminaire;
 import requete.Requetes;
@@ -30,15 +31,19 @@ public class Confirmation extends ActionSeminaire {
 		//Confirmer un séminaire 1 semaine avant sa date planifiée :
 		try {
 			cal.add(Calendar.DATE, 7);
-			List<Seminaire> seminaires = new ArrayList<>();
-		
-			seminaires.addAll(Requetes.selectLesSeminaire(conn));
 			
+			// Les séminaires en attente
+			List<Seminaire> seminaires = new ArrayList<>();		
+			seminaires.addAll(Requetes.selectLesSeminaireEnATT(conn));
 			annulationDeSeminaire(conn,seminaires);
 			decisionSeminaire(conn,seminaires);
+			
+			// Les séminaires en confirmer
+			List<Seminaire> semi = new ArrayList<>();
+			semi.addAll(Requetes.selectLesSeminaireCON(conn));
+			blilanSeminaire(conn, semi);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			SQLWarningsExceptions.printExceptions(e);
 		}	
 	}
 	
@@ -59,14 +64,16 @@ public class Confirmation extends ActionSeminaire {
 					&& cal.getTime().compareTo(semi.getDate()) == 1){
 				semi.setEtatSemi("ANN");
 				System.out.println("Le nombre d'inscriptions est insuffisant pour :"+ semi.getLibelle() );
+				Requetes.updateSeminaireEtat(conn, semi);
+				
 			}
 		}
 	}
 
 	/**
-	 * prévenir le prestataire (soit annulation, soit confirmation avec le nombre de personnes)
+	 * @param conn
 	 * @param seminaires
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	private void decisionSeminaire(Connection conn,List<Seminaire> seminaires) throws SQLException{
 		for(Seminaire semi : seminaires){
@@ -75,27 +82,45 @@ public class Confirmation extends ActionSeminaire {
 				switch(InsertionScanner.saisirEntier(0,2," 0 = annulation | 1 = confirmation | 2 = Passé au suivant ") ){
 					case 0:
 						semi.setEtatSemi("ANN");
+						Requetes.updateSeminaireEtat(conn, semi);
 						break;
 					case 1:
 						semi.setEtatSemi("CON");
-						List<Salle> lesSalles = Requetes.selectLesSalles(conn, semi.getNombrePersonneActuelle(), semi.getNumPerstataire());
-						List<Integer> lesIdSalle = null;
-						for(Salle s : lesSalles){
-							System.out.println(s.toString());
-							lesIdSalle.add(s.getNumSalle());
-						}
-						int UneSalle = InsertionScanner.saisirEntier(lesIdSalle, true, "Saisir le numéro d'une Salle :");
-						Requetes.updateSalle(conn, UneSalle, semi.getNumPerstataire());
+						Requetes.updateSeminaireEtat(conn, semi);
 						break;
 					case 2:
+						
 				}
 			}
 		}
 	}
 		
 	//• bilan budgétaire si le séminaire a lieu
-	private void blilanSeminaire(List<Seminaire> seminaires){
-		
+	/**
+	 * Présente le bilan de tous les séminaire confirmés
+	 * @param conn
+	 * @param seminaires
+	 * @throws SQLException
+	 */
+	private void blilanSeminaire(Connection conn, List<Seminaire> seminaires) throws SQLException{
+		for(Seminaire semi : seminaires){
+			float totalConf = Requetes.selectLeTotalConf(conn, semi);
+			float totalPause = Requetes.selectLeTotalPause(conn, semi);
+			float totalRepat = Requetes.selectLeTotalRepat(conn, semi);
+			float prixSalle = Requetes.selectPrixSalle(conn, semi);
+			System.out.println("-------------------");
+			System.out.println("Titre : " + semi.getLibelle());
+			System.out.println("Le prix des repas : "+ totalRepat);
+			System.out.println("Le prix de la salle : "+ prixSalle);
+			System.out.println("Le prix des pauses : "+ totalPause);
+			System.out.println("Le prix des conférencier : "+ totalConf);
+			float totalDepence = totalRepat+prixSalle+totalPause+totalConf;
+			System.out.println("\nTotal Dépence : "+ totalDepence);
+			float totalRectte = semi.getNombrePersonneActuelle()*semi.getPrixUnePlace();
+			System.out.println("\nTotal Recette : "+ totalRectte);
+			System.out.println("\nRésultat : "+ (totalRectte - totalDepence));
+			System.out.println("-------------------");
+		}
 	}
 
 }
