@@ -43,8 +43,10 @@ public class Start {
 		        	semi.action(ConnexionBdd.getConnexion());
 		        }
 			}while(continuer);
+		}catch(IllegalStateException e){
+			System.err.println(e.getMessage());
 		}finally{
-			ConnexionBdd.closeConnexion();
+			//ConnexionBdd.closeConnexion();
 		}
 	}
 

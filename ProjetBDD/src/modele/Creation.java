@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.InsertionScanner;
+import exception.SQLWarningsExceptions;
 import modele.type.Conferencier;
+import modele.type.Salle;
 import modele.type.Seminaire;
 import requete.Requetes;
 
@@ -42,6 +44,7 @@ public class Creation extends ActionSeminaire {
 			Requetes.affichePersonneSelect(conn,"ACT");
 			seminaire.setNumAnimateur(InsertionScanner.saisirEntier("Choisir un numéro d'animateur :"));
 	        
+			
 			//-------------------- Titre Séminaire --------------------		
 			seminaire.setLibelle(InsertionScanner.saisirString("Choisir un titre pour le Séminaire :"));
 	        
@@ -81,6 +84,21 @@ public class Creation extends ActionSeminaire {
 	        Requetes.affichePrestataireSelect(conn, seminaire.getDateToString());
 	        seminaire.setNumPerstataire(InsertionScanner.saisirEntier("Choisir un prestataire :"));  
 	        
+	        //-------------------- Salle ------------------------
+	        List<Salle> lesSalles = Requetes.selectLesSalles(conn, seminaire);
+			List<Integer> lesIdSalle = null;
+			System.out.println("Les Salles disponible :");
+			for(Salle s : lesSalles){
+				System.out.println(s.toString());
+				lesIdSalle.add(s.getNumSalle());
+			}
+			seminaire.setNumSeminaire(InsertionScanner.saisirEntier(lesIdSalle, true, "Saisir le numéro d'une Salle :"));
+
+			//-------------------- Pause ------------------------
+			Requetes.afficheLesPause(conn, seminaire.getNumPerstataire());
+			List<Integer> lesPauses = ajouterDesPauses(seminaire.getDureeSemi());
+			
+			
 			//-------------------- total des recettes prévus (min, max) --------------------
 	        seminaire.setRecettePrevuMin(InsertionScanner.saisirDecimal("Définir une recette minimal :"));
 	        seminaire.setRecettePrevuMax(InsertionScanner.saisirDecimal("Définir une recette maximal :"));
@@ -90,9 +108,8 @@ public class Creation extends ActionSeminaire {
 	        seminaire.setDepencePrevuMax(InsertionScanner.saisirDecimal("Définir une dépence maximal :"));
 	        
 	        // INSERT INTO
-	       
-	        // TODO: A voire pour les conférenciers
-	        // TODO: Discuter de comment mettre les 4 dèrnière varible dans la base de données
+	        
+	        
 	        Requetes.insertSeminaire(conn,seminaire);
 	        Requetes.insertOrganise(conn, seminaire);
 	        
@@ -100,18 +117,22 @@ public class Creation extends ActionSeminaire {
 	        	this.insertionDesConférencier(conn,seminaire);
 	        }
 	        
+	        this.insertionPause(conn, lesPauses, seminaire.getNumSeminaire());
+	        
 	        //Prevue
 	        this.insertionActiviter(conn, seminaire);
 	        
 		} catch (SQLException e) {
 			System.err.println("Erreur base de données : "+ e.getMessage());
-			e.printStackTrace();
+			SQLWarningsExceptions.printExceptions(e);
 		}
 	}
 	
 	/**
 	 * Permet de créer des conférenciers
-	 * @throws SQLException 
+	 * @param conn
+	 * @param seminaire
+	 * @throws SQLException
 	 */
 	private void ajouterDesConferencier(Connection conn,Seminaire seminaire) throws SQLException{
 		List<Conferencier> lesConferenciers =  new ArrayList<>();
@@ -152,6 +173,33 @@ public class Creation extends ActionSeminaire {
 		for(Integer i : seminaire.getLesActivites()){
 			Requetes.insertUneActiviter(conn,seminaire.getNumSeminaire(),i);
 		}
+	}
+	
+	/**
+	 *  liste des pause
+	 * @param conn
+	 * @param seminaire
+	 * @throws SQLException
+	 */
+	private void insertionPause(Connection conn, List<Integer> lesPauses,int numSeminaire) throws SQLException{
+		for(Integer i : lesPauses){
+			Requetes.insertUnePause(conn, i, numSeminaire);
+		}
+	}
+	
+	/**
+	 * Permet de saisir une ou plusieurs pauses
+	 * @param typeJour
+	 * @return
+	 */
+	private List<Integer> ajouterDesPauses(int typeJour){
+		List<Integer> inte = new ArrayList<>();
+		int nbPauseMax = 1;
+		if(typeJour != 2){nbPauseMax = 2;}
+		for(int i=0;i<nbPauseMax;i++){
+			inte.add(InsertionScanner.saisirEntier("Saisir l'id d'une pause :"));
+		}
+		return inte;
 	}
 	
 }

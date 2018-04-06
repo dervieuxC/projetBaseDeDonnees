@@ -4,46 +4,29 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import exception.SQLWarningsExceptions;
-
 /**
- * Creation d'un singleton pour la connexion
+ * Création d'un singleton
  * @autor Thibaut MASSELIN
  */
 
 public class ConnexionBdd {
+	private static Connection connection = null;
+	private final static String URL = "jdbc:oracle:thin:@im2ag-oracle.e.ujf-grenoble.fr:1521:im2ag";
+	private final static String USER = "dervieco";
+	private final static String PASSWRD = "newpasswd42";
+	
 	/**
-	 *  Attribut de classe
-	 */
-	private static final String configurationFile = "BD.properties.txt";
-	private static Connection connection = null;	
-	private static String  JDBC_DRIVER, DB_URL, USER, PASSWRD;
-
-	/**
-	 *  Constructor private
+	 *  Constructor
 	 */
 	private ConnexionBdd(){
 		try {
 			
-			DatabaseAccessProperties dap = new DatabaseAccessProperties(configurationFile);
-			JDBC_DRIVER = dap.getJdbcDriver();
-			DB_URL = dap.getDatabaseUrl();
-			USER = dap.getUsername();
-			PASSWRD = dap.getPassword();
-		    
-			// Load the database driver
-            Class.forName(JDBC_DRIVER);
-            
-			connection = (Connection) DriverManager.getConnection(DB_URL, USER, PASSWRD);
+			Class.forName("oracle.jdbc.OracleDriver");
+			connection = (Connection) DriverManager.getConnection(URL, USER, PASSWRD);
 			
-		} catch (SQLException se) {
-            // Print information about SQL exceptions
-            SQLWarningsExceptions.printExceptions(se);
-            
-        } catch (Exception e) {
-            System.err.println("Exception: " + e.getMessage());
-            e.printStackTrace();
-        }
+		} catch (ClassNotFoundException |SQLException e) {
+			throw new IllegalStateException("Imposible de se connecter à la BDD!");
+		}
 	}
 
 	/**
@@ -59,7 +42,7 @@ public class ConnexionBdd {
 	}
 
 	/**
-	 *@info Instance de connexion
+	 *  Instance de connexion
 	 */
 	private static void getInstance(){
 		if (connection == null) {
@@ -68,8 +51,9 @@ public class ConnexionBdd {
 	}
 	
 	/**
-	 * @info Ferme la connection
+	 *  Ferme la connection
 	 */
+	
 	public static void closeConnexion() {
 		try {
 			connection.close();

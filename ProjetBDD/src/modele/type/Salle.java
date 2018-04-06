@@ -1,5 +1,9 @@
 package modele.type;
-
+/**
+ * 
+ * @author Thibaut Masselin
+ *
+ */
 public class Salle {
 	private int numPrestataire;
 	private String libelle;
