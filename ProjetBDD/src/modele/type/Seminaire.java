@@ -41,7 +41,12 @@ public class Seminaire {
 	
 	//Constructeur
 	public Seminaire(){
-		lesConferenciers = new ArrayList<>();
+		this.lesConferenciers = new ArrayList<>();
+		// Valeurs par défaut
+		this.recettePrevuMin = 0.0f;
+		this.recettePrevuMax = 0.0f;
+		this.depencePrevuMin = 0.0f;
+		this.depencePrevuMax = 0.0f;
 	}
 	
 	//GETTER - SETTER
@@ -67,6 +72,7 @@ public class Seminaire {
 		return dateString;
 	}
 
+	@SuppressWarnings("deprecation")
 	public String getDateToString(){
 		return dateString.getDate()+"-"+InsertionScanner.findMois(dateString.getMonth())+"-"+String.valueOf(dateString.getYear()).substring(2, 4);
 	}
@@ -76,6 +82,7 @@ public class Seminaire {
 		this.dateString = dateString;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void setDate(String dateString) {		
 		this.dateString = new Date(dateString);
 	}
@@ -199,6 +206,5 @@ public class Seminaire {
 	public void setEtatSemi(String etatSemi) {
 		this.etatSemi = etatSemi;
 	}
-	
 	
 }
