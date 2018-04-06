@@ -30,6 +30,45 @@ public class InsertionScanner {
 	 */
 	private InsertionScanner(){}
 	
+	/**
+	 * C'est une demande faite à l'utilisteur pour rentrer un 
+	 * entier par rapport a une liste de integer donnée.
+	 *  
+	 * @param ints est une liste de ints
+	 * @param appartient permet de savoir comment traiter la list 
+	 * 		  TRUE == doit appartenier à la list
+	 * 		  FALSE == ne doit pas appartenir à la list
+	 * @param message affiche dans la console une indication 
+	 * 		  à destination de l'utilisateur
+	 * @return Un entier
+	 */
+	public static int saisirEntier(List<Integer> ints,boolean appartient,String message){
+		System.out.println(message);
+		while(true){
+			try{
+			    String str = sc.nextLine();
+				int value = Integer.parseInt(str.trim());
+				if(appartient){
+					//TRUE
+					if(ints.contains(value)){
+						return value;
+					}else{
+						System.out.println("Cette valeur est inconnu");
+					}
+				}else{
+					//FALSE
+					if(ints.contains(value)){
+						System.out.println("Cette valeur est déjà connu");
+					}else{
+						return value;
+					}
+				}
+			}catch(Exception e){
+				System.err.println("Exception lever :" + e.getMessage());
+			}
+			System.err.println("Erreur de saisie !");
+		}
+	}
 
 	/**
 	 * C'est une demande faite à l'utilisteur pour rentrer un 
@@ -43,7 +82,6 @@ public class InsertionScanner {
 		System.out.println(message);
 		while(true){
 			try{
-				System.out.print(">");
 			    String str = sc.nextLine();
 				int value = Integer.parseInt(str.trim());
 			    return value;
@@ -71,7 +109,6 @@ public class InsertionScanner {
 		System.out.println(message);
 		while(true){
 			try{
-				System.out.print(">");
 				String str = sc.nextLine();
 				value = Integer.parseInt(str.trim());
 				if( value >= min && value <= max ){
@@ -98,7 +135,6 @@ public class InsertionScanner {
 		System.out.println(message);
 		while(true){
 			try{
-				System.out.print(">");
 			    String str = sc.nextLine();
 				int value = Integer.parseInt(str.trim());
 				if(value >= min){
@@ -125,7 +161,6 @@ public class InsertionScanner {
 		System.out.println(message);
 		while(true){
 			try{
-				System.out.print(">");
 				String str = sc.nextLine();
 				value = Float.parseFloat(str.trim());
 				return value;
@@ -216,7 +251,6 @@ public class InsertionScanner {
 	 */
 	public static String saisirString(String message){
 		System.out.println(message);
-		System.out.print(">");
 		String str = sc.nextLine();
 		return str.trim();	
 	}
@@ -237,6 +271,7 @@ public class InsertionScanner {
 		if(dureeJour == 2){
 			nbIter = 6;
 		}
+		System.out.println(message);
 		for(int i = 0; i < nbIter;i++){
 			lesActivitees.add(InsertionScanner.saisirEntier("- Activité n°" +i+" : "));
 		}

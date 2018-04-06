@@ -32,12 +32,13 @@ public class Creation extends ActionSeminaire {
 			seminaire.setNumAnimateur(InsertionScanner.saisirEntier("Choisir un numéro d'animateur :"));
 	        
 			//-------------------- Titre Séminaire --------------------		
-			seminaire.setLibelle(InsertionScanner.saisirString("Choisir un numéro d'animateur :"));
+			seminaire.setLibelle(InsertionScanner.saisirString("Choisir un titre pour le Séminaire :"));
 	        
 			
 			//-------------------- Thème --------------------
 			Requetes.afficheThemeSelect(conn);
 			seminaire.setNumTheme(InsertionScanner.saisirEntier("Entrer le thème selcetionner :"));
+			//Proposé de créer un nouveau theme
 			
 	        //-------------------- date --------------------
 			seminaire.setDateString(InsertionScanner.DateStringOracle("Déterminer une date :"));
@@ -67,10 +68,6 @@ public class Creation extends ActionSeminaire {
 			//-------------------- total des recettes prévus (min, max) --------------------
 	        seminaire.setRecettePrevuMin(InsertionScanner.saisirDecimal("Définir une recette minimal :"));
 	        seminaire.setRecettePrevuMax(InsertionScanner.saisirDecimal("Définir une recette maximal :"));
-			
-	        // valeur calculer
-	        // max +20%
-	        // min moitierDesParticipant
 	        
 	        //-------------------- total des dépenses prévus (min, max)--------------------
 	        seminaire.setDepencePrevuMin(InsertionScanner.saisirDecimal("Définir une dépence minimal :"));
@@ -84,10 +81,10 @@ public class Creation extends ActionSeminaire {
 	        Requetes.insertOrganise(conn, seminaire);
 	        
 	        if(seminaire.getLesConferenciers().size() > 0){
-	        	insertionDesConférencier(conn,seminaire);
+	        	this.insertionDesConférencier(conn,seminaire);
 	        }
-	        //FaitUneConf
 	        //Prevue
+	        this.insertionActiviter(conn, seminaire);
 	        
 		} catch (SQLException e) {
 			System.err.println("Erreur base de données : "+ e.getMessage());
@@ -95,6 +92,9 @@ public class Creation extends ActionSeminaire {
 		}
 	}
 	
+	/**
+	 * Permet de créer des conférenciers
+	 */
 	private void ajouterDesConferencier(Seminaire seminaire){
 		List<Conferencier> lesConferenciers =  new ArrayList<>();
 		while(InsertionScanner.saisirEntier(0,1," - 0 = Arrêter d'ajouter des conférenciers \n"
@@ -108,15 +108,20 @@ public class Creation extends ActionSeminaire {
 			
 			lesConferenciers.add(new Conferencier(numConferencier,titre,transparents,prixDePrestation));
 		}
-		seminaire.setLesConferenciers(lesConferenciers);
+		seminaire.addAllLesConferenciers(lesConferenciers);
 		// Pour savoir si il y a quelque chose à ajouter
 	}
 	
 	private void insertionDesConférencier(Connection conn, Seminaire seminaire) throws SQLException{
-		for(Conferencier c : seminaire.getLesConferenciers()){
-			Requetes.insertFaitUneConf(conn, seminaire.getNumSeminaire(), c);
+		for(Conferencier conferencier : seminaire.getLesConferenciers()){
+			Requetes.insertFaitUneConf(conn, seminaire.getNumSeminaire(), conferencier);
 		}
-		
+	}
+	
+	private void insertionActiviter(Connection conn, Seminaire seminaire) throws SQLException{
+		for(Integer i : seminaire.getLesActivites()){
+			Requetes.insertAction(conn,seminaire.getNumSeminaire(),i);
+		}
 	}
 	
 }

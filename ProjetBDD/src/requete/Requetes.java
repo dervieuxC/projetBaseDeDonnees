@@ -8,12 +8,6 @@ import java.sql.Statement;
 import modele.type.Conferencier;
 import modele.type.Seminaire;
 
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  *
  * @author Corentin Dervieux
@@ -22,68 +16,84 @@ import modele.type.Seminaire;
  */
 
 public class Requetes {
+	
 	/**
-	 * Ajouter un Séminaire
-	 * @param conn
+	 * Ajouter un Séminaire dans la base de données
+	 * @param conn permet d'utiliser la connexion
 	 * @param seminaire
 	 * @throws SQLException
 	 */
 	public static void insertSeminaire(Connection conn, Seminaire seminaire) throws SQLException {      
         Statement stmt = conn.createStatement();
         int rs = stmt.executeUpdate("insert into Seminaires values ('"+seminaire.getNumSeminaire()+"',"
-        											  + " '"+seminaire.getLibelle()+ "',"
-        											  + " '"+seminaire.getDureeSemi()+ "',"
-        											  + " 'ATT',"
-        											  + " '"+seminaire.getPrixUnePlace()+ "',"
-        											  + " '"+seminaire.getDateString()+ "',"
-        											  + " '"+seminaire.getNombrePlace()+ "',"
-        											  + " '"+seminaire.getNumTheme()+ "',"
-        											  + " ,"+seminaire.getNumPerstataire()+"', NULL,NULL)");
-        											  // Il reste la salle et le repat
+					  + " '"+seminaire.getLibelle()+ "',"
+					  + " '"+seminaire.getDureeSemi()+ "',"
+					  + " 'ATT',"
+					  + " '"+seminaire.getPrixUnePlace()+ "',"
+					  + " '"+seminaire.getDateString()+ "',"
+					  + " '"+seminaire.getNombrePlace()+ "',"
+					  + " '"+seminaire.getNumTheme()+ "',"
+					  + " ,"+seminaire.getNumPerstataire()+"', NULL,NULL)");
+					  // Il reste la salle et le repat
         // Close the result set, statement and the connection 
         stmt.close();
     }
 	
 	/**
-	 * Ajouter un Conférencier
-	 * @param conn
+	 * Ajouter un Conférencier dans la base de données
+	 * @param conn permet d'utiliser la connexion
 	 * @param seminaire
 	 * @throws SQLException
 	 */
 	public static void insertFaitUneConf(Connection conn, int idSemi,Conferencier conferencier) throws SQLException {      
         Statement stmt = conn.createStatement();
         int rs = stmt.executeUpdate("insert into FaitUneConf values ('"+conferencier.getNumConferencier()+"',"
-        												+ "'"+idSemi+"',"
-        												+ "'"+conferencier.getPrixDePrestation()+"',"
-        												+ "'"+conferencier.getTransparents()+"',"
-        												+ "'"+conferencier.getTitre()+"')");
+						+ "'"+idSemi+"',"
+						+ "'"+conferencier.getPrixDePrestation()+"',"
+						+ "'"+conferencier.getTransparents()+"',"
+						+ "'"+conferencier.getTitre()+"')");
         // Close the result set, statement and the connection 
         stmt.close();
     }
 	
 	/**
-	 * Ajouter un Animateur
-	 * @param conn
+	 * Ajouter un Animateur dans la base de données
+	 * @param conn permet d'utiliser la connexion
 	 * @param seminaire
 	 * @throws SQLException
 	 */
 	public static void insertOrganise(Connection conn, Seminaire seminaire) throws SQLException {      
         Statement stmt = conn.createStatement();
-        int rs = stmt.executeUpdate("insert into Organise values ('"+seminaire.getNumAnimateur()+"','"+seminaire.getNumSeminaire()+"')");
+        int rs = stmt.executeUpdate("insert into Organise values ('"+seminaire.getNumAnimateur()+"',"
+        		+ "'"+seminaire.getNumSeminaire()+"')");
+        // Close the result set, statement and the connection 
+        stmt.close();
+    }
+	
+	/**
+	 * Ajouter une Action dans la base de données
+	 * @param conn permet d'utiliser la connexion
+	 * @param seminaire
+	 * @throws SQLException
+	 */
+	public static void insertAction(Connection conn, int idSemi,int idAction) throws SQLException {      
+        Statement stmt = conn.createStatement();
+        int rs = stmt.executeUpdate("insert into Prevue values ('"+idSemi+"','"+idAction+"')");
         // Close the result set, statement and the connection 
         stmt.close();
     }
 	
 	/**
 	 * selcetion des personnes qui sont des animateurs/animatrices
-	 * @param conn
+	 * @param conn permet d'utiliser la connexion
 	 * @throws SQLException
 	 */
 	public static void afficheAnimateurSelect(Connection conn)throws SQLException {
 		Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from Personnes where typePers='ACT'");
         while (rs.next()) {
-            System.out.println(" • " + rs.getInt("idPers") + " - "+ rs.getString("nomPers") + " " +rs.getString("prenomPers"));
+            System.out.println(" • " + rs.getInt("idPers") + " - "+ rs.getString("nomPers") + ""
+            		+ " " +rs.getString("prenomPers"));
         }
         rs.close();
         stmt.close();
@@ -91,7 +101,7 @@ public class Requetes {
 	
 	/**
 	 * selcetion toutes activitées qui sont dans la bdd
-	 * @param conn
+	 * @param conn permet d'utiliser la connexion
 	 * @throws SQLException
 	 */
 	public static void afficheActiviteSelect(Connection conn)throws SQLException {
@@ -106,7 +116,7 @@ public class Requetes {
 	
 	/**
 	 * Affiche les prestataires disponibles à une date donnée
-	 * @param conn
+	 * @param conn permet d'utiliser la connexion
 	 * @param dateDuJour
 	 * @throws SQLException
 	 */
@@ -124,7 +134,7 @@ public class Requetes {
 	
 	/**
 	 * Affiche les Thèmes présent dans la base de données
-	 * @param conn
+	 * @param conn permet d'utiliser la connexion
 	 * @throws SQLException
 	 */
 	public static void afficheThemeSelect(Connection conn)throws SQLException {
@@ -136,44 +146,22 @@ public class Requetes {
         rs.close();
         stmt.close();
 	} 
-	
-	/*
-    public static void requeteNumToNom(Connection conn) throws SQLException {
-        String id;
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Entrer un numero de Spectacle dont vous souhaitez avoir le nom :");
-        id = sc.nextLine();
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("select nomS from LesSpectacles where numS=" + id);
+
+	/**
+	 * Affiche les Thèmes présent dans la base de données
+	 * @param conn permet d'utiliser la connexion
+	 * @throws SQLException
+	 */
+	public static int selectMaxSeminaire(Connection conn)throws SQLException {
+		int idSeminaire = 1;
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT MAX(idSemi) FROM Seminaire");
         if (rs.next()) {
-            System.out.println("nom Spectale : " + rs.getString(1) + " ");
-        } else {
-            System.out.println("numero spectacle incorrecte");
+        	idSeminaire = rs.getInt("idSemi") + 1;
         }
-        // Close the result set, statement and theconnection 
         rs.close();
         stmt.close();
-    }
-    
-     public static void requeteNewRep(Connection conn) throws SQLException {
-        String id, mois, annee, jour;
-        Scanner sc = new Scanner(System.in);
-        Date date;
-        System.out.println("entrez le numero du Spectacle dans le quel vous voulez ajoutez une representation : ");
-        id = sc.nextLine();
-        System.out.println("entrez le jour de la representation : ");
-        jour = sc.nextLine();
-        System.out.println("entrez le mois de la representation : ");
-        mois = sc.nextLine();
-        System.out.println("entrez l'annee de la representation : ");
-        annee = sc.nextLine();
-        
-        Statement stmt = conn.createStatement();
-        int rs = stmt.executeUpdate("insert into LESREPRESENTATIONS values ('"+id+"', '"+ jour +"-"+ mois +"-"+annee + "')");
-        System.out.println("nombre de ligne creer :"+rs);
-        // Close the result set, statement and theconnection 
-        stmt.close();
-    }
-    */
-
+        return idSeminaire;
+	} 
+	
 }

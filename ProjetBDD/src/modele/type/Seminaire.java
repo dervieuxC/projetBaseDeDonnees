@@ -1,5 +1,6 @@
 package modele.type;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +29,9 @@ public class Seminaire {
 	private float depencePrevuMax;
 	
 	//Constructeur
-	public Seminaire(){}
+	public Seminaire(){
+		lesConferenciers = new ArrayList<>();
+	}
 
 	//GETTER - SETTER
 	
@@ -77,8 +80,8 @@ public class Seminaire {
 		return lesConferenciers;
 	}
 
-	public void setLesConferenciers(List<Conferencier> lesConferenciers) {
-		this.lesConferenciers = lesConferenciers;
+	public void addAllLesConferenciers(List<Conferencier> lesConferenciers) {
+		this.lesConferenciers.addAll(lesConferenciers);
 	}
 
 	public int getNombrePlace() {
