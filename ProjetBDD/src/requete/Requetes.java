@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import modele.type.Conferencier;
 import modele.type.Seminaire;
@@ -28,12 +30,14 @@ public class Requetes {
         int rs = stmt.executeUpdate("insert into Seminaires values ('"+seminaire.getNumSeminaire()+"',"
 					  + " '"+seminaire.getLibelle()+ "',"
 					  + " '"+seminaire.getDureeSemi()+ "',"
-					  + " 'ATT',"
+					  + " '"+seminaire.getEtatSemi()+"',"
 					  + " '"+seminaire.getPrixUnePlace()+ "',"
-					  + " '"+seminaire.getDateString()+ "',"
+					  + " '"+seminaire.getDateToString()+ "',"
 					  + " '"+seminaire.getNombrePlace()+ "',"
 					  + " '"+seminaire.getNumTheme()+ "',"
-					  + " ,"+seminaire.getNumPerstataire()+"', NULL,NULL)");
+					  + " ,"+seminaire.getNumPerstataire()+"'"
+					  + ", NULL"
+					  + " ,"+seminaire.getNumRepas()+")");
 					  // Il reste la salle et le repat
         // Close the result set, statement and the connection 
         stmt.close();
@@ -76,12 +80,27 @@ public class Requetes {
 	 * @param seminaire
 	 * @throws SQLException
 	 */
-	public static void insertAction(Connection conn, int idSemi,int idAction) throws SQLException {      
+	public static void insertUneActiviter(Connection conn, int idSemi,int idAction) throws SQLException {      
         Statement stmt = conn.createStatement();
         int rs = stmt.executeUpdate("insert into Prevue values ('"+idSemi+"','"+idAction+"')");
         // Close the result set, statement and the connection 
         stmt.close();
     }
+	
+	/**
+	 * selcetion les repas qui sont présent dans la base de données
+	 * @param conn permet d'utiliser la connexion
+	 * @throws SQLException
+	 */
+	public static void afficheRepasSelect(Connection conn)throws SQLException {
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select * from Repas");
+        while (rs.next()) {
+            System.out.println(" • " + rs.getInt("idRepa") + " - "+ rs.getString("libelleRepa"));
+        }
+        rs.close();
+        stmt.close();
+	}
 	
 	/**
 	 * selcetion des personnes qui sont des animateurs/animatrices
@@ -148,9 +167,14 @@ public class Requetes {
 	} 
 
 	/**
-	 * Affiche les Thèmes présent dans la base de données
+	 * Selectionne le numéro du séminaire maximum +1
 	 * @param conn permet d'utiliser la connexion
 	 * @throws SQLException
+	 * 
+	 * @info On concidère qu'il aura toujours au moins 
+	 * 		 un séminaire dans la base de donnée
+	 * 
+	 * @return Un entier
 	 */
 	public static int selectMaxSeminaire(Connection conn)throws SQLException {
 		int idSeminaire = 1;
@@ -163,5 +187,33 @@ public class Requetes {
         stmt.close();
         return idSeminaire;
 	} 
+	
+	/**
+	 * Selectionne tous les séminaires en attente
+	 * @param conn permet d'utiliser la connexion
+	 * @throws SQLException
+	 * 
+	 * @return Une list de Séminaire
+	 */
+	public static List<Seminaire> selectLesSeminaire(Connection conn)throws SQLException {
+		List<Seminaire> seminaires = new ArrayList<>();
+		Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Seminaire where  etatSemi =='ATT' AND"
+        							+ " sysdate >= dateSemi");
+        while (rs.next()) {
+        	Seminaire seminaire = new Seminaire();
+        	seminaire.setDate(rs.getDate("dateSemi"));
+        	//Si jamais il y a un problème avec la date utilise : seminaire.setDate(rs.getString("dateSemi"));
+        	seminaire.setLibelle(rs.getString("libelleSemi"));
+        	seminaire.setNombrePlace(rs.getInt("nbPers"));
+        	seminaire.setNumPerstataire(rs.getInt("idPres"));
+        	seminaire.setNumSeminaire(rs.getInt("idSemi"));
+        	seminaires.add(seminaire);
+        }
+        rs.close();
+        stmt.close();
+        return seminaires;
+	} 
+
 	
 }

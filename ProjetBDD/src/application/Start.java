@@ -11,7 +11,7 @@ public class Start {
 			do{
 				ActionSeminaire semi = null;
 				
-		        int choix = InsertionScanner.saisirEntier(1,5,"Choisir une commende :\n"
+		        int choix = InsertionScanner.saisirEntier(1,5,"Choisir une commande :\n"
 		        		+ " - 1 : Création d'un séminaire\n"
 		        		+ " - 2 : Incription à un séminaire\n"
 		        		+ " - 3 : Confimation à un séminaire\n"

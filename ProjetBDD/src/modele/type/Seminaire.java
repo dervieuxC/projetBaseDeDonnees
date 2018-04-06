@@ -1,7 +1,10 @@
 package modele.type;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import application.InsertionScanner;
 
 /**
  * 
@@ -15,13 +18,21 @@ public class Seminaire {
 	private int numAnimateur;
 	private int numTheme;
 	private String libelle;
-	private String dateString;
+	
+	private Date dateString;
+	
+	private String etatSemi; 
+	
 	private int dureeSemi;
 	private List<Integer> lesActivites;
 	private List<Conferencier> lesConferenciers;
+	
 	private int nombrePlace;
+	private int nombrePersonneActuelle;
+	
 	private float prixUnePlace;
 	private int numPerstataire;
+	private int numRepas;
     
 	private float recettePrevuMin;
 	private float recettePrevuMax;
@@ -32,7 +43,7 @@ public class Seminaire {
 	public Seminaire(){
 		lesConferenciers = new ArrayList<>();
 	}
-
+	
 	//GETTER - SETTER
 	
 	
@@ -52,12 +63,21 @@ public class Seminaire {
 		this.numTheme = numTheme;
 	}
 
-	public String getDateString() {
+	public Date getDate() {
 		return dateString;
 	}
 
-	public void setDateString(String dateString) {
+	public String getDateToString(){
+		return dateString.getDate()+"-"+InsertionScanner.findMois(dateString.getMonth())+"-"+String.valueOf(dateString.getYear()).substring(2, 4);
+	}
+	
+	public void setDate(Date dateString) {
+		
 		this.dateString = dateString;
+	}
+	
+	public void setDate(String dateString) {		
+		this.dateString = new Date(dateString);
 	}
 
 	public int getDureeSemi() {
@@ -154,6 +174,30 @@ public class Seminaire {
 
 	public void setLibelle(String libelle) {
 		this.libelle = libelle;
+	}
+
+	public int getNumRepas() {
+		return numRepas;
+	}
+
+	public void setNumRepas(int numRepas) {
+		this.numRepas = numRepas;
+	}
+
+	public int getNombrePersonneActuelle() {
+		return nombrePersonneActuelle;
+	}
+
+	public void setNombrePersonneActuelle(int nombrePersonneActuelle) {
+		this.nombrePersonneActuelle = nombrePersonneActuelle;
+	}
+
+	public String getEtatSemi() {
+		return etatSemi;
+	}
+
+	public void setEtatSemi(String etatSemi) {
+		this.etatSemi = etatSemi;
 	}
 	
 	

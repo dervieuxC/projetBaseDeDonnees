@@ -21,11 +21,22 @@ public class Creation extends ActionSeminaire {
 
 	@Override
 	public void action(Connection conn) {
-		
+		creatSeminaire(conn);
+	}
+	
+	/**
+	 * Création d'un séminaire
+	 * @param conn
+	 */
+	private void creatSeminaire(Connection conn){
 		//Créer un séminaire avec :
 		try {
 			
 			Seminaire seminaire = new Seminaire();
+			
+			//-------------------- Numéro du Séminaire --------------------
+			seminaire.setNumSeminaire(Requetes.selectMaxSeminaire(conn));
+			seminaire.setEtatSemi("ATT");
 			
 			//-------------------- animateur --------------------		
 			Requetes.afficheAnimateurSelect(conn);
@@ -34,18 +45,23 @@ public class Creation extends ActionSeminaire {
 			//-------------------- Titre Séminaire --------------------		
 			seminaire.setLibelle(InsertionScanner.saisirString("Choisir un titre pour le Séminaire :"));
 	        
-			
 			//-------------------- Thème --------------------
 			Requetes.afficheThemeSelect(conn);
 			seminaire.setNumTheme(InsertionScanner.saisirEntier("Entrer le thème selcetionner :"));
 			//Proposé de créer un nouveau theme
 			
 	        //-------------------- date --------------------
-			seminaire.setDateString(InsertionScanner.DateStringOracle("Déterminer une date :"));
+			seminaire.setDate(InsertionScanner.DateStringOracle("Déterminer une date :"));
 	        
 	        //-------------------- journée --------------------
-			seminaire.setDureeSemi(InsertionScanner.saisirEntier(0,2,"Choisir la durée du seminaire :(0 = matin | 1=après-midi | 2=journée)"));
-	        		
+			seminaire.setDureeSemi(InsertionScanner.saisirEntier(0,2,"Choisir la durée du seminaire :(0 = matin | 1 = après-midi | 2 = journée)"));
+	        
+			//-------------------- repat --------------------
+			if(seminaire.getDureeSemi() == 2 || InsertionScanner.saisirEntier(0,1,"Voulez vous un repas :(0 = non | 1 = oui)")== 1){
+				Requetes.afficheRepasSelect(conn);
+				seminaire.setNumRepas(InsertionScanner.saisirEntier("Choisir un repas :"));
+			}
+			
 			//-------------------- programme initial (activités) --------------------
 	        Requetes.afficheActiviteSelect(conn);
 	        seminaire.setLesActivites(InsertionScanner.activiteSelected(seminaire.getDureeSemi(),"Choisir les avtivitées souhaiter :"));
@@ -62,7 +78,7 @@ public class Creation extends ActionSeminaire {
 			seminaire.setPrixUnePlace(InsertionScanner.saisirDecimal("Définir un prix pour une place :"));
 	        
 			//-------------------- prestataire --------------------
-	        Requetes.affichePrestaterSelect(conn, seminaire.getDateString());
+	        Requetes.affichePrestaterSelect(conn, seminaire.getDateToString());
 	        seminaire.setNumPerstataire(InsertionScanner.saisirEntier("Choisir un prestataire :"));  
 	        
 			//-------------------- total des recettes prévus (min, max) --------------------
@@ -83,6 +99,7 @@ public class Creation extends ActionSeminaire {
 	        if(seminaire.getLesConferenciers().size() > 0){
 	        	this.insertionDesConférencier(conn,seminaire);
 	        }
+	        
 	        //Prevue
 	        this.insertionActiviter(conn, seminaire);
 	        
@@ -112,15 +129,27 @@ public class Creation extends ActionSeminaire {
 		// Pour savoir si il y a quelque chose à ajouter
 	}
 	
+	/**
+	 * Ajouter une liste de conférencier
+	 * @param conn
+	 * @param seminaire
+	 * @throws SQLException
+	 */
 	private void insertionDesConférencier(Connection conn, Seminaire seminaire) throws SQLException{
 		for(Conferencier conferencier : seminaire.getLesConferenciers()){
 			Requetes.insertFaitUneConf(conn, seminaire.getNumSeminaire(), conferencier);
 		}
 	}
 	
+	/**
+	 * Ajouter une liste d'activiter
+	 * @param conn
+	 * @param seminaire
+	 * @throws SQLException
+	 */
 	private void insertionActiviter(Connection conn, Seminaire seminaire) throws SQLException{
 		for(Integer i : seminaire.getLesActivites()){
-			Requetes.insertAction(conn,seminaire.getNumSeminaire(),i);
+			Requetes.insertUneActiviter(conn,seminaire.getNumSeminaire(),i);
 		}
 	}
 	
